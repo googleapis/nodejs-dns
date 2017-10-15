@@ -27,7 +27,7 @@ const zoneName = `test-${uuid().substring(0, 13)}`;
 
 test.before(async () => {
   await dns.createZone(zoneName, {
-    dnsName: `${process.env.GCLOUD_PROJECT}.appspot.com.`
+    dnsName: `${process.env.GCLOUD_PROJECT}.appspot.com.`,
   });
 });
 
@@ -40,35 +40,34 @@ test.after.always(async () => {
 test.beforeEach(tools.stubConsole);
 test.afterEach.always(tools.restoreConsole);
 
-test.cb(`should list zones`, (t) => {
+test.cb(`should list zones`, t => {
   const dnsMock = {
     getZones: () => {
-      return dns.getZones()
-        .then(([zones]) => {
-          t.true(Array.isArray(zones));
+      return dns.getZones().then(([zones]) => {
+        t.true(Array.isArray(zones));
 
-          // Listing is eventually consistent, give the indexes time to update
-          setTimeout(() => {
-            try {
-              t.true(console.log.called);
-              t.deepEqual(console.log.getCall(0).args, [`Zones:`]);
-              zones.forEach((zone, i) => {
-                t.deepEqual(console.log.getCall(i + 1).args, [zone.name]);
-              });
-              t.end();
-            } catch (err) {
-              t.end(err);
-            }
-          }, 200);
+        // Listing is eventually consistent, give the indexes time to update
+        setTimeout(() => {
+          try {
+            t.true(console.log.called);
+            t.deepEqual(console.log.getCall(0).args, [`Zones:`]);
+            zones.forEach((zone, i) => {
+              t.deepEqual(console.log.getCall(i + 1).args, [zone.name]);
+            });
+            t.end();
+          } catch (err) {
+            t.end(err);
+          }
+        }, 200);
 
-          return [zones];
-        });
-    }
+        return [zones];
+      });
+    },
   };
 
   setTimeout(() => {
     proxyquire(`../quickstart`, {
-      '@google-cloud/dns': sinon.stub().returns(dnsMock)
+      '@google-cloud/dns': sinon.stub().returns(dnsMock),
     });
   }, 5000);
 });

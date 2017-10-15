@@ -116,14 +116,14 @@ function Change(zone, id) {
      *   var apiResponse = data[1];
      * });
      */
-    getMetadata: true
+    getMetadata: true,
   };
 
   common.ServiceObject.call(this, {
     parent: zone,
     baseUrl: '/changes',
     id: id,
-    methods: methods
+    methods: methods,
   });
 }
 
@@ -178,6 +178,5 @@ Change.prototype.create = function(config, callback) {
  * that a callback is omitted.
  */
 common.util.promisifyAll(Change);
-
 
 module.exports = Change;

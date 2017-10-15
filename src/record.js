@@ -85,13 +85,13 @@ Record.fromZoneRecord_ = function(zone, type, bindData) {
     soa: '{mname} {rname} {serial} {retry} {refresh} {expire} {minimum}',
     spf: '{data}',
     srv: '{priority} {weight} {port} {target}',
-    txt: '{txt}'
+    txt: '{txt}',
   };
 
   var metadata = {
     data: format(typeToZoneFormat[type.toLowerCase()], bindData),
     name: bindData.name,
-    ttl: bindData.ttl
+    ttl: bindData.ttl,
   };
 
   return new Record(zone, type, metadata);
@@ -138,7 +138,7 @@ Record.prototype.delete = function(callback) {
  */
 Record.prototype.toJSON = function() {
   var recordObject = extend({}, this.metadata, {
-    type: this.type.toUpperCase()
+    type: this.type.toUpperCase(),
   });
 
   if (recordObject.data) {
@@ -159,10 +159,12 @@ Record.prototype.toJSON = function() {
 Record.prototype.toString = function() {
   var json = this.toJSON();
 
-  return (json.rrdatas || [{}]).map(function(data) {
-    json.rrdata = data;
-    return format('{name} {ttl} IN {type} {rrdata}', json);
-  }).join('\n');
+  return (json.rrdatas || [{}])
+    .map(function(data) {
+      json.rrdata = data;
+      return format('{name} {ttl} IN {type} {rrdata}', json);
+    })
+    .join('\n');
 };
 
 /*! Developer Documentation
@@ -171,7 +173,7 @@ Record.prototype.toString = function() {
  * that a callback is omitted.
  */
 common.util.promisifyAll(Record, {
-  exclude: ['toJSON', 'toString']
+  exclude: ['toJSON', 'toString'],
 });
 
 module.exports = Record;

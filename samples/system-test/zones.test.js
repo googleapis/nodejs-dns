@@ -28,7 +28,7 @@ const cmd = `node zones.js`;
 test.before(tools.checkCredentials);
 test.before(async () => {
   await dns.createZone(zoneName, {
-    dnsName: `${process.env.GCLOUD_PROJECT}.appspot.com.`
+    dnsName: `${process.env.GCLOUD_PROJECT}.appspot.com.`,
   });
 });
 
@@ -38,11 +38,13 @@ test.after.always(async () => {
   } catch (err) {} // ignore error
 });
 
-test(`should list zones`, async (t) => {
+test(`should list zones`, async t => {
   t.plan(0);
-  await tools.tryTest(async (assert) => {
-    const output = await tools.runAsync(`${cmd} list`, cwd);
-    assert(output.includes(`Zones:`));
-    assert(output.includes(zoneName));
-  }).start();
+  await tools
+    .tryTest(async assert => {
+      const output = await tools.runAsync(`${cmd} list`, cwd);
+      assert(output.includes(`Zones:`));
+      assert(output.includes(zoneName));
+    })
+    .start();
 });
