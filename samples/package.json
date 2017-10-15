@@ -25,19 +25,5 @@
     "ava": "0.21.0",
     "proxyquire": "1.8.0",
     "sinon": "3.2.0"
-  },
-  "cloud-repo-tools": {
-    "requiresKeyFile": true,
-    "requiresProjectId": true,
-    "product": "dns",
-    "samples": [
-      {
-        "id": "zones",
-        "name": "Zones",
-        "file": "zones.js",
-        "docs_link": "https://cloud.google.com/dns/docs",
-        "usage": "node zones.js --help"
-      }
-    ]
   }
 }
