@@ -24,15 +24,14 @@ const projectId = 'YOUR_PROJECT_ID';
 
 // Instantiates a client
 const dnsClient = DNS({
-  projectId: projectId
+  projectId: projectId,
 });
 
 // Lists all zones in the current project
-dnsClient.getZones()
-  .then((results) => {
-    const zones = results[0];
+dnsClient.getZones().then(results => {
+  const zones = results[0];
 
-    console.log('Zones:');
-    zones.forEach((zone) => console.log(zone.name));
-  });
+  console.log('Zones:');
+  zones.forEach(zone => console.log(zone.name));
+});
 // [END dns_quickstart]

@@ -56,9 +56,9 @@ function DNS(options) {
     baseUrl: 'https://www.googleapis.com/dns/v1',
     scopes: [
       'https://www.googleapis.com/auth/ndev.clouddns.readwrite',
-      'https://www.googleapis.com/auth/cloud-platform'
+      'https://www.googleapis.com/auth/cloud-platform',
     ],
-    packageJson: require('../package.json')
+    packageJson: require('../package.json'),
   };
 
   common.Service.call(this, config, options);
@@ -119,21 +119,24 @@ DNS.prototype.createZone = function(name, config, callback) {
   // Required by the API.
   config.description = config.description || '';
 
-  this.request({
-    method: 'POST',
-    uri: '/managedZones',
-    json: config
-  }, function(err, resp) {
-    if (err) {
-      callback(err, null, resp);
-      return;
+  this.request(
+    {
+      method: 'POST',
+      uri: '/managedZones',
+      json: config,
+    },
+    function(err, resp) {
+      if (err) {
+        callback(err, null, resp);
+        return;
+      }
+
+      var zone = self.zone(resp.name);
+      zone.metadata = resp;
+
+      callback(null, zone, resp);
     }
-
-    var zone = self.zone(resp.name);
-    zone.metadata = resp;
-
-    callback(null, zone, resp);
-  });
+  );
 };
 
 /**
@@ -171,31 +174,34 @@ DNS.prototype.getZones = function(query, callback) {
     query = {};
   }
 
-  this.request({
-    uri: '/managedZones',
-    qs: query
-  }, function(err, resp) {
-    if (err) {
-      callback(err, null, null, resp);
-      return;
-    }
+  this.request(
+    {
+      uri: '/managedZones',
+      qs: query,
+    },
+    function(err, resp) {
+      if (err) {
+        callback(err, null, null, resp);
+        return;
+      }
 
-    var zones = arrify(resp.managedZones).map(function(zone) {
-      var zoneInstance = self.zone(zone.name);
-      zoneInstance.metadata = zone;
-      return zoneInstance;
-    });
-
-    var nextQuery = null;
-
-    if (resp.nextPageToken) {
-      nextQuery = extend({}, query, {
-        pageToken: resp.nextPageToken
+      var zones = arrify(resp.managedZones).map(function(zone) {
+        var zoneInstance = self.zone(zone.name);
+        zoneInstance.metadata = zone;
+        return zoneInstance;
       });
-    }
 
-    callback(null, zones, nextQuery, resp);
-  });
+      var nextQuery = null;
+
+      if (resp.nextPageToken) {
+        nextQuery = extend({}, query, {
+          pageToken: resp.nextPageToken,
+        });
+      }
+
+      callback(null, zones, nextQuery, resp);
+    }
+  );
 };
 
 /**
@@ -258,7 +264,7 @@ common.paginator.extend(DNS, 'getZones');
  * that a callback is omitted.
  */
 common.util.promisifyAll(DNS, {
-  exclude: ['zone']
+  exclude: ['zone'],
 });
 
 DNS.Zone = Zone;

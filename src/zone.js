@@ -149,7 +149,7 @@ function Zone(dns, name) {
      *   var apiResponse = data[1];
      * });
      */
-    getMetadata: true
+    getMetadata: true,
   };
 
   common.ServiceObject.call(this, {
@@ -157,7 +157,7 @@ function Zone(dns, name) {
     baseUrl: '/managedZones',
     id: name,
     createMethod: dns.createZone.bind(dns),
-    methods: methods
+    methods: methods,
   });
 
   this.name = name;
@@ -178,9 +178,12 @@ util.inherits(Zone, common.ServiceObject);
  * @param {object} callback.apiResponse - Raw API response.
  */
 Zone.prototype.addRecords = function(records, callback) {
-  this.createChange({
-    add: records
-  }, callback);
+  this.createChange(
+    {
+      add: records,
+    },
+    callback
+  );
 };
 
 /**
@@ -247,33 +250,36 @@ Zone.prototype.change = function(id) {
 Zone.prototype.createChange = function(config, callback) {
   var self = this;
 
-  if (!config || !config.add && !config.delete) {
+  if (!config || (!config.add && !config.delete)) {
     throw new Error('Cannot create a change with no additions or deletions.');
   }
 
   var body = extend({}, config, {
     additions: arrify(config.add).map(exec('toJSON')),
-    deletions: arrify(config.delete).map(exec('toJSON'))
+    deletions: arrify(config.delete).map(exec('toJSON')),
   });
 
   delete body.add;
   delete body.delete;
 
-  this.request({
-    method: 'POST',
-    uri: '/changes',
-    json: body
-  }, function(err, resp) {
-    if (err) {
-      callback(err, null, resp);
-      return;
+  this.request(
+    {
+      method: 'POST',
+      uri: '/changes',
+      json: body,
+    },
+    function(err, resp) {
+      if (err) {
+        callback(err, null, resp);
+        return;
+      }
+
+      var change = self.change(resp.id);
+      change.metadata = resp;
+
+      callback(null, change, resp);
     }
-
-    var change = self.change(resp.id);
-    change.metadata = resp;
-
-    callback(null, change, resp);
-  });
+  );
 };
 
 /**
@@ -413,9 +419,12 @@ Zone.prototype.deleteRecords = function(records, callback) {
     return;
   }
 
-  this.createChange({
-    delete: records
-  }, callback);
+  this.createChange(
+    {
+      delete: records,
+    },
+    callback
+  );
 };
 
 /**
@@ -548,30 +557,33 @@ Zone.prototype.getChanges = function(query, callback) {
     delete query.sort;
   }
 
-  this.request({
-    uri: '/changes',
-    qs: query
-  }, function(err, resp) {
-    if (err) {
-      callback(err, null, null, resp);
-      return;
-    }
+  this.request(
+    {
+      uri: '/changes',
+      qs: query,
+    },
+    function(err, resp) {
+      if (err) {
+        callback(err, null, null, resp);
+        return;
+      }
 
-    var changes = (resp.changes || []).map(function(change) {
-      var changeInstance = self.change(change.id);
-      changeInstance.metadata = change;
-      return changeInstance;
-    });
-
-    var nextQuery = null;
-    if (resp.nextPageToken) {
-      nextQuery = extend({}, query, {
-        pageToken: resp.nextPageToken
+      var changes = (resp.changes || []).map(function(change) {
+        var changeInstance = self.change(change.id);
+        changeInstance.metadata = change;
+        return changeInstance;
       });
-    }
 
-    callback(null, changes, nextQuery, resp);
-  });
+      var nextQuery = null;
+      if (resp.nextPageToken) {
+        nextQuery = extend({}, query, {
+          pageToken: resp.nextPageToken,
+        });
+      }
+
+      callback(null, changes, nextQuery, resp);
+    }
+  );
 };
 
 /**
@@ -692,41 +704,44 @@ Zone.prototype.getRecords = function(query, callback) {
     });
 
     query = {
-      filterByTypes_: filterByTypes_
+      filterByTypes_: filterByTypes_,
     };
   }
 
   var requestQuery = extend({}, query);
   delete requestQuery.filterByTypes_;
 
-  this.request({
-    uri: '/rrsets',
-    qs: requestQuery
-  }, function(err, resp) {
-    if (err) {
-      callback(err, null, null, resp);
-      return;
-    }
+  this.request(
+    {
+      uri: '/rrsets',
+      qs: requestQuery,
+    },
+    function(err, resp) {
+      if (err) {
+        callback(err, null, null, resp);
+        return;
+      }
 
-    var records = (resp.rrsets || []).map(function(record) {
-      return self.record(record.type, record);
-    });
-
-    if (query.filterByTypes_) {
-      records = records.filter(function(record) {
-        return query.filterByTypes_[record.type];
+      var records = (resp.rrsets || []).map(function(record) {
+        return self.record(record.type, record);
       });
-    }
 
-    var nextQuery = null;
-    if (resp.nextPageToken) {
-      nextQuery = extend({}, query, {
-        pageToken: resp.nextPageToken
-      });
-    }
+      if (query.filterByTypes_) {
+        records = records.filter(function(record) {
+          return query.filterByTypes_[record.type];
+        });
+      }
 
-    callback(null, records, nextQuery, resp);
-  });
+      var nextQuery = null;
+      if (resp.nextPageToken) {
+        nextQuery = extend({}, query, {
+          pageToken: resp.nextPageToken,
+        });
+      }
+
+      callback(null, records, nextQuery, resp);
+    }
+  );
 };
 
 /**
@@ -921,10 +936,13 @@ Zone.prototype.replaceRecords = function(recordType, newRecords, callback) {
       return;
     }
 
-    self.createChange({
-      add: newRecords,
-      delete: recordsToDelete
-    }, callback);
+    self.createChange(
+      {
+        add: newRecords,
+        delete: recordsToDelete,
+      },
+      callback
+    );
   });
 };
 
@@ -976,7 +994,7 @@ common.paginator.extend(Zone, ['getChanges', 'getRecords']);
  * that a callback is omitted.
  */
 common.util.promisifyAll(Zone, {
-  exclude: ['change', 'record']
+  exclude: ['change', 'record'],
 });
 
 module.exports = Zone;
