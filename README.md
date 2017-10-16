@@ -2,7 +2,7 @@
 
 # Google Cloud DNS: Node.js Client
 
-[![release level](https://img.shields.io/badge/release%20level-alpha-yellow.svg?style&#x3D;flat)](https://cloud.google.com/terms/launch-stages)
+[![release level](https://img.shields.io/badge/release%20level-alpha-orange.svg?style&#x3D;flat)](https://cloud.google.com/terms/launch-stages)
 [![CircleCI](https://img.shields.io/circleci/project/github/googleapis/nodejs-dns.svg?style=flat)](https://circleci.com/gh/googleapis/nodejs-dns)
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/googleapis/nodejs-dns?branch=master&svg=true)](https://ci.appveyor.com/project/googleapis/nodejs-dns)
 [![codecov](https://img.shields.io/codecov/c/github/googleapis/nodejs-dns/master.svg?style=flat)](https://codecov.io/gh/googleapis/nodejs-dns)
