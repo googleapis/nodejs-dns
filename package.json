@@ -38,9 +38,11 @@
     "Tim Swast <swast@google.com>"
   ],
   "scripts": {
+    "cover": "nyc --reporter=lcov mocha --require intelli-espower-loader test/*.js && nyc report",
     "generate-scaffolding": "repo-tools generate all && repo-tools generate lib_samples_readme -l samples/ --config .cloud-repo-tools.json",
     "publish-module": "node ../../scripts/publish.js dns",
-    "test": "mocha test/*.js",
+    "test-no-cover": "repo-tools test run --cmd mocha -- test/*.js --no-timeouts",
+    "test": "repo-tools test run --cmd npm -- run cover",
     "samples-test": "cd samples/ && npm link ../ && npm test && cd ../",
     "system-test": "mocha system-test/*.js --no-timeouts --bail"
   },
@@ -55,8 +57,13 @@
   },
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "^2.0.9",
-    "async": "^2.1.4",
-    "mocha": "^3.0.1",
+    "async": "^2.5.0",
+    "codecov": "^2.3.1",
+    "extend": "^3.0.1",
+    "intelli-espower-loader": "^1.0.1",
+    "mocha": "^3.5.3",
+    "nyc": "^11.2.1",
+    "power-assert": "^1.4.4",
     "proxyquire": "^1.7.10",
     "tmp": "^0.0.31",
     "uuid": "^3.0.1"
