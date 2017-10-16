@@ -44,7 +44,7 @@
     "test-no-cover": "repo-tools test run --cmd mocha -- test/*.js --no-timeouts",
     "test": "repo-tools test run --cmd npm -- run cover",
     "samples-test": "cd samples/ && npm link ../ && npm test && cd ../",
-    "system-test": "mocha system-test/*.js --no-timeouts --bail"
+    "system-test": "repo-tools test run --cmd mocha -- system-test/*.js --no-timeouts"
   },
   "dependencies": {
     "@google-cloud/common": "^0.13.0",
