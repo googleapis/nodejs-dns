@@ -15,22 +15,23 @@
 
 'use strict';
 
-function listZones () {
+function listZones() {
   // [START dns_list_zones]
   // Imports the Google Cloud client library
   const DNS = require('@google-cloud/dns');
 
-  // Instantiates a client
-  const dns = DNS();
+  // Creates a client
+  const dns = new DNS();
 
   // Lists all zones in the current project
-  dns.getZones()
-    .then((results) => {
+  dns
+    .getZones()
+    .then(results => {
       const zones = results[0];
       console.log('Zones:');
-      zones.forEach((zone) => console.log(zone.name));
+      zones.forEach(zone => console.log(zone.name));
     })
-    .catch((err) => {
+    .catch(err => {
       console.error('ERROR:', err);
     });
   // [END dns_list_zones]
@@ -44,5 +45,4 @@ require(`yargs`) // eslint-disable-line
   .recommendCommands()
   .epilogue(`For more information, see https://cloud.google.com/dns/docs`)
   .help()
-  .strict()
-  .argv;
+  .strict().argv;
