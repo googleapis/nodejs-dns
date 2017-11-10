@@ -37,7 +37,7 @@ function listZones() {
   // [END dns_list_zones]
 }
 
-require(`yargs`) // eslint-disable-line
+require(`yargs`)
   .demand(1)
   .command(`list`, `Lists all zones in the current project.`, {}, listZones)
   .example(`node $0 list`, `Lists all zones in the current project.`)
