@@ -1032,6 +1032,9 @@ Zone.prototype.import = function(localPath, callback) {
     }
 
     var parsedZonefile = zonefile.parse(file);
+    var defaultTTL = parsedZonefile.$ttl;
+    delete parsedZonefile.$ttl;
+
     var recordTypes = Object.keys(parsedZonefile);
     var recordsToCreate = [];
 
@@ -1039,6 +1042,7 @@ Zone.prototype.import = function(localPath, callback) {
       var recordTypeSet = arrify(parsedZonefile[recordType]);
 
       recordTypeSet.forEach(function(record) {
+        record.ttl = record.ttl || defaultTTL;
         recordsToCreate.push(Record.fromZoneRecord_(self, recordType, record));
       });
     });
