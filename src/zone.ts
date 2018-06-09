@@ -16,17 +16,15 @@
 
 'use strict';
 
-var arrify = require('arrify');
-var common = require('@google-cloud/common');
-var exec = require('methmeth');
-var extend = require('extend');
-var flatten = require('lodash.flatten');
-var fs = require('fs');
-var groupBy = require('lodash.groupby');
-var is = require('is');
-var prop = require('propprop');
-var util = require('util');
-var zonefile = require('dns-zonefile');
+import * as common from '@google-cloud/common';
+import extend from 'extend';
+import arrify from 'arrify';
+import flatten from 'lodash.flatten';
+import * as fs from 'fs';
+import groupBy from 'lodash.groupby';
+import is from 'is';
+import * as util from 'util';
+const zonefile = require('dns-zonefile');
 
 var Change = require('./change.js');
 var Record = require('./record.js');
@@ -347,8 +345,8 @@ Zone.prototype.createChange = function(config, callback) {
 
   var body = extend(
     {
-      additions: groupByType(arrify(config.add).map(exec('toJSON'))),
-      deletions: groupByType(arrify(config.delete).map(exec('toJSON'))),
+      additions: groupByType(arrify(config.add).map(x => x.toJSON())),
+      deletions: groupByType(arrify(config.delete).map(x => x.toJSON())),
     },
     config
   );
@@ -358,7 +356,7 @@ Zone.prototype.createChange = function(config, callback) {
   function groupByType(changes) {
     changes = groupBy(changes, 'type');
 
-    var changesArray = [];
+    var changesArray: {}[] = [];
 
     for (var recordType in changes) {
       var recordsByName = groupBy(changes[recordType], 'name');
@@ -369,7 +367,7 @@ Zone.prototype.createChange = function(config, callback) {
 
         if (records.length > 1) {
           // Combine the `rrdatas` values from all records of the same type.
-          templateRecord.rrdatas = flatten(records.map(prop('rrdatas')));
+          templateRecord.rrdatas = flatten(records.map(x => x.rrdatas));
         }
 
         changesArray.push(templateRecord);
@@ -656,7 +654,7 @@ Zone.prototype.export = function(localPath, callback) {
       return;
     }
 
-    var stringRecords = records.map(exec('toString')).join('\n');
+    var stringRecords = records.map(x => x.toString()).join('\n');
 
     fs.writeFile(localPath, stringRecords, 'utf-8', function(err) {
       callback(err || null);
@@ -1036,7 +1034,7 @@ Zone.prototype.import = function(localPath, callback) {
     delete parsedZonefile.$ttl;
 
     var recordTypes = Object.keys(parsedZonefile);
-    var recordsToCreate = [];
+    var recordsToCreate: {}[] = [];
 
     recordTypes.forEach(function(recordType) {
       var recordTypeSet = arrify(parsedZonefile[recordType]);

@@ -16,13 +16,12 @@
 
 'use strict';
 
-var arrify = require('arrify');
-var assert = require('assert');
-var extend = require('extend');
-var nodeutil = require('util');
-var proxyquire = require('proxyquire');
-var Service = require('@google-cloud/common').Service;
-var util = require('@google-cloud/common').util;
+import assert from 'assert';
+import extend from 'extend';
+import * as nodeutil from 'util';
+import proxyquire from 'proxyquire';
+import arrify from 'arrify';
+import {Service, util} from '@google-cloud/common';
 
 var extended = false;
 var fakePaginator = {
@@ -73,7 +72,7 @@ describe('DNS', function() {
   var PROJECT_ID = 'project-id';
 
   before(function() {
-    DNS = proxyquire('../', {
+    DNS = proxyquire('../src', {
       '@google-cloud/common': {
         Service: FakeService,
         paginator: fakePaginator,
@@ -103,12 +102,6 @@ describe('DNS', function() {
       assert(promisified);
     });
 
-    it('should work without new', function() {
-      assert.doesNotThrow(function() {
-        DNS({projectId: PROJECT_ID});
-      });
-    });
-
     it('should normalize the arguments', function() {
       var normalizeArgumentsCalled = false;
       var options = {};
@@ -134,7 +127,7 @@ describe('DNS', function() {
         'https://www.googleapis.com/auth/ndev.clouddns.readwrite',
         'https://www.googleapis.com/auth/cloud-platform',
       ]);
-      assert.deepEqual(calledWith.packageJson, require('../package.json'));
+      assert.deepEqual(calledWith.packageJson, require('../../package.json'));
     });
   });
 
