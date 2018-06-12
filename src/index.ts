@@ -19,6 +19,8 @@
 import * as common from '@google-cloud/common';
 import extend from 'extend';
 import * as util from 'util';
+import is from 'is';
+import arrify from 'arrify';
 
 var Zone = require('./zone.js');
 
@@ -233,7 +235,7 @@ DNS.prototype.createZone = function(name, config, callback) {
 DNS.prototype.getZones = function(query, callback) {
   var self = this;
 
-  if (typeof query === 'function') {
+  if (is.fn(query)) {
     callback = query;
     query = {};
   }
@@ -249,7 +251,7 @@ DNS.prototype.getZones = function(query, callback) {
         return;
       }
 
-      var zones = [...resp.managedZones].map(function(zone) {
+      var zones = arrify(resp.managedZones).map(function(zone) {
         var zoneInstance = self.zone(zone.name);
         zoneInstance.metadata = zone;
         return zoneInstance;
