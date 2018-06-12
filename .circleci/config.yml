@@ -3,32 +3,22 @@ workflows:
   version: 2
   tests:
     jobs: &workflow_jobs
-      - node4:
-          filters: &all_commits
-            tags:
-              only: /.*/
       - node6:
           filters: *all_commits
       - node8:
-          filters: *all_commits
-      - node9:
           filters: *all_commits
       - node10:
           filters: *all_commits
       - lint:
           requires:
-            - node4
             - node6
             - node8
-            - node9
             - node10
           filters: *all_commits
       - docs:
           requires:
-            - node4
             - node6
             - node8
-            - node9
             - node10
           filters: *all_commits
       - system_tests:
@@ -62,9 +52,9 @@ workflows:
               only: master
     jobs: *workflow_jobs
 jobs:
-  node4:
+  node6:
     docker:
-      - image: 'node:4'
+      - image: 'node:6'
     steps: &unit_tests_steps
       - checkout
       - run: &remove_package_lock
@@ -94,17 +84,9 @@ jobs:
           name: Submit coverage data to codecov.
           command: node_modules/.bin/codecov
           when: always
-  node6:
-    docker:
-      - image: 'node:6'
-    steps: *unit_tests_steps
   node8:
     docker:
       - image: 'node:8'
-    steps: *unit_tests_steps
-  node9:
-    docker:
-      - image: 'node:9'
     steps: *unit_tests_steps
   node10:
     docker:
@@ -112,7 +94,7 @@ jobs:
     steps: *unit_tests_steps
   lint:
     docker:
-      - image: 'node:8'
+      - image: 'node:10'
     steps:
       - checkout
       - run: *remove_package_lock
@@ -129,7 +111,7 @@ jobs:
           command: npm run lint
   docs:
     docker:
-      - image: 'node:8'
+      - image: 'node:10'
     steps:
       - checkout
       - run: *remove_package_lock
@@ -139,7 +121,7 @@ jobs:
           command: npm run docs
   sample_tests:
     docker:
-      - image: 'node:8'
+      - image: 'node:10'
     steps:
       - checkout
       - run: *remove_package_lock
@@ -186,7 +168,7 @@ jobs:
           when: always
   publish_npm:
     docker:
-      - image: 'node:8'
+      - image: 'node:10'
     steps:
       - checkout
       - run:
