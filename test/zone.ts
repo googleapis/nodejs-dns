@@ -16,17 +16,14 @@
 
 'use strict';
 
-var arrify = require('arrify');
-var assert = require('assert');
-var exec = require('methmeth');
-var extend = require('extend');
-var flatten = require('lodash.flatten');
-var nodeutil = require('util');
-var prop = require('propprop');
-var proxyquire = require('proxyquire');
-var ServiceObject = require('@google-cloud/common').ServiceObject;
-var util = require('@google-cloud/common').util;
-var uuid = require('uuid');
+import assert from 'assert';
+import extend from 'extend';
+import flatten from 'lodash.flatten';
+import * as nodeutil from 'util';
+import arrify from 'arrify';
+import proxyquire from 'proxyquire';
+import uuid from 'uuid';
+import {ServiceObject, util} from '@google-cloud/common';
 
 var promisified = false;
 var fakeUtil = extend({}, util, {
@@ -65,7 +62,7 @@ function FakeChange() {
 function FakeRecord() {
   this.calledWith_ = arguments;
 }
-FakeRecord.fromZoneRecord_ = function() {
+(FakeRecord as any).fromZoneRecord_ = function() {
   var record = new FakeRecord();
   record.calledWith_ = arguments;
   return record;
@@ -196,7 +193,7 @@ describe('Zone', function() {
   });
 
   describe('createChange', function() {
-    function generateRecord(recordJson) {
+    function generateRecord(recordJson?) {
       recordJson = extend(
         {
           name: uuid.v1(),
@@ -222,7 +219,7 @@ describe('Zone', function() {
     it('should parse and rename add to additions', function(done) {
       var recordsToAdd = [generateRecord(), generateRecord()];
 
-      var expectedAdditions = recordsToAdd.map(exec('toJSON'));
+      var expectedAdditions = recordsToAdd.map(x => x.toJSON());
 
       zone.request = function(reqOpts) {
         assert.strictEqual(reqOpts.json.add, undefined);
@@ -236,7 +233,7 @@ describe('Zone', function() {
     it('should parse and rename delete to deletions', function(done) {
       var recordsToDelete = [generateRecord(), generateRecord()];
 
-      var expectedDeletions = recordsToDelete.map(exec('toJSON'));
+      var expectedDeletions = recordsToDelete.map(x => x.toJSON());
 
       zone.request = function(reqOpts) {
         assert.strictEqual(reqOpts.json.delete, undefined);
@@ -255,7 +252,7 @@ describe('Zone', function() {
 
       zone.request = function(reqOpts) {
         var expectedRRDatas = flatten(
-          recordsToAdd.map(exec('toJSON')).map(prop('rrdatas'))
+          recordsToAdd.map(x => x.toJSON()).map(x => x.rrdatas)
         );
 
         assert.deepStrictEqual(reqOpts.json.additions, [
@@ -829,7 +826,7 @@ describe('Zone', function() {
 
     describe('success', function() {
       var recordType = 'ns';
-      var parsedZonefile = {};
+      var parsedZonefile: any = {};
 
       beforeEach(function() {
         parsedZonefile = {

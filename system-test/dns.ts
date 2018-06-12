@@ -16,15 +16,14 @@
 
 'use strict';
 
-var assert = require('assert');
-var async = require('async');
-var exec = require('methmeth');
-var format = require('string-format-obj');
-var fs = require('fs');
-var tmp = require('tmp');
-var uuid = require('uuid');
+import assert from 'assert';
+import async from 'async';
+import * as fs from 'fs';
+import tmp from 'tmp';
+import uuid from 'uuid';
+const format = require('string-format-obj');
 
-var DNS = require('../');
+var DNS = require('../../');
 
 var dns = new DNS();
 var DNS_DOMAIN = process.env.GCLOUD_TESTS_DNS_DOMAIN;
@@ -120,15 +119,11 @@ var DNS_DOMAIN = process.env.GCLOUD_TESTS_DNS_DOMAIN;
         done(err);
         return;
       }
-
-      async.each(zones, exec('delete', {force: true}), function(err) {
-        if (err) {
-          done(err);
-          return;
-        }
-
+      Promise.all(zones.map(z => {
+        return z.delete({force: true});
+      })).then(() => {
         ZONE.create({dnsName: DNS_DOMAIN}, done);
-      });
+      }, done);
     });
   });
 
@@ -222,7 +217,6 @@ var DNS_DOMAIN = process.env.GCLOUD_TESTS_DNS_DOMAIN;
       tmp.setGracefulCleanup();
       tmp.file(function tempFileCreated(err, tmpFilename) {
         assert.ifError(err);
-
         async.series(
           [
             function(next) {

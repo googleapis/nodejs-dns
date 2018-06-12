@@ -16,10 +16,10 @@
 
 'use strict';
 
-var arrify = require('arrify');
-var common = require('@google-cloud/common');
-var extend = require('extend');
-var format = require('string-format-obj');
+import {util} from '@google-cloud/common';
+import extend from 'extend';
+import arrify from 'arrify';
+const format = require('string-format-obj');
 
 /**
  * Create a Resource Record object.
@@ -88,7 +88,7 @@ function Record(zone, type, metadata) {
  *     based on the type of record.
  * @returns {Record}
  */
-Record.fromZoneRecord_ = function(zone, type, bindData) {
+(Record as any).fromZoneRecord_ = function(zone, type, bindData) {
   var typeToZoneFormat = {
     a: '{ip}',
     aaaa: '{ip}',
@@ -201,7 +201,7 @@ Record.prototype.toString = function() {
  * All async methods (except for streams) will return a Promise in the event
  * that a callback is omitted.
  */
-common.util.promisifyAll(Record, {
+util.promisifyAll(Record, {
   exclude: ['toJSON', 'toString'],
 });
 

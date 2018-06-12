@@ -16,11 +16,11 @@
 
 'use strict';
 
-var arrify = require('arrify');
-var common = require('@google-cloud/common');
-var extend = require('extend');
-var is = require('is');
-var util = require('util');
+import * as common from '@google-cloud/common';
+import extend from 'extend';
+import * as util from 'util';
+import is from 'is';
+import arrify from 'arrify';
 
 var Zone = require('./zone.js');
 
@@ -79,10 +79,6 @@ var Zone = require('./zone.js');
  * Full quickstart example:
  */
 function DNS(options) {
-  if (!(this instanceof DNS)) {
-    return new DNS(options);
-  }
-
   options = common.util.normalizeArguments(this, options);
 
   var config = {
@@ -91,7 +87,7 @@ function DNS(options) {
       'https://www.googleapis.com/auth/ndev.clouddns.readwrite',
       'https://www.googleapis.com/auth/cloud-platform',
     ],
-    packageJson: require('../package.json'),
+    packageJson: require('../../package.json'),
   };
 
   common.Service.call(this, config, options);
@@ -351,7 +347,7 @@ common.util.promisifyAll(DNS, {
  * @see Zone
  * @type {Constructor}
  */
-DNS.Zone = Zone;
+(DNS as any).Zone = Zone;
 
 /**
  * The default export of the `@google-cloud/dns` package is the {@link DNS}
