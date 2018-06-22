@@ -173,7 +173,7 @@ const DNS_DOMAIN = process.env.GCLOUD_TESTS_DNS_DOMAIN;
 
     it('should import records from a zone file', function(done) {
       const zoneFilename = require.resolve('./data/zonefile.zone');
-      const zoneFileTemplate = fs.readFileSync(zoneFilename, 'utf-8');
+      let zoneFileTemplate = fs.readFileSync(zoneFilename, 'utf-8');
       zoneFileTemplate = format(zoneFileTemplate, {
         DNS_DOMAIN: DNS_DOMAIN,
       });
