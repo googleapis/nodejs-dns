@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@google-cloud/dns": "0.7.2",
-    "yargs": "11.0.0"
+    "yargs": "11.1.0"
   },
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "2.3.0",
