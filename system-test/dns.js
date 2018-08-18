@@ -30,7 +30,9 @@ const dns = new DNS();
 const DNS_DOMAIN = process.env.GCLOUD_TESTS_DNS_DOMAIN;
 
 if (!DNS_DOMAIN) {
-  assert.fail(`The 'GCLOUD_TESTS_DNS_DOMAIN' environment variable must be set to run the system tests.`);
+  assert.fail(
+    `The 'GCLOUD_TESTS_DNS_DOMAIN' environment variable must be set to run the system tests.`
+  );
 }
 
 // Only run the tests if there is a domain to test with.
