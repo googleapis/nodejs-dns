@@ -15,7 +15,7 @@
 
 'use strict';
 
-const dns = require(`@google-cloud/dns`)();
+const DNS = require(`@google-cloud/dns`);
 const path = require(`path`);
 const test = require(`ava`);
 const tools = require(`@google-cloud/nodejs-repo-tools`);
@@ -24,6 +24,7 @@ const uuid = require(`uuid`);
 const zoneName = `test-${uuid().substr(0, 13)}`;
 const cwd = path.join(__dirname, `..`);
 const cmd = `node zones.js`;
+const dns = new DNS();
 
 test.before(tools.checkCredentials);
 test.before(async () => {
