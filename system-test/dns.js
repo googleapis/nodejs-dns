@@ -245,7 +245,7 @@ describe('dns', function() {
           ttl: 3600,
           name: DNS_DOMAIN,
           data: '10 0 5222 127.0.0.1.',
-          signatureRrdatas: []
+          signatureRrdatas: [],
         });
         const change = ZONE.change();
         change.create({add: record}, function(err) {
