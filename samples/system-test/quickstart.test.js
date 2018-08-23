@@ -20,7 +20,8 @@ const sinon = require(`sinon`);
 const test = require(`ava`);
 const tools = require(`@google-cloud/nodejs-repo-tools`);
 
-const dns = proxyquire(`@google-cloud/dns`, {})();
+const DNS = proxyquire(`@google-cloud/dns`, {});
+const dns = new DNS();
 
 const uuid = require(`uuid`);
 const zoneName = `test-${uuid().substring(0, 13)}`;
