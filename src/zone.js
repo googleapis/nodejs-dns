@@ -20,6 +20,7 @@ const arrify = require('arrify');
 const {ServiceObject} = require('@google-cloud/common');
 const {paginator} = require('@google-cloud/paginator');
 const {promisifyAll} = require('@google-cloud/promisify');
+const request = require('teeny-request');
 const exec = require('methmeth');
 const extend = require('extend');
 const flatten = require('lodash.flatten');
@@ -211,6 +212,7 @@ class Zone extends ServiceObject {
       id: name,
       createMethod: dns.createZone.bind(dns),
       methods: methods,
+      requestModule: request,
     });
     /**
      * @name Zone#name

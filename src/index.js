@@ -20,6 +20,7 @@ const arrify = require('arrify');
 const {Service} = require('@google-cloud/common');
 const {paginator} = require('@google-cloud/paginator');
 const {promisifyAll} = require('@google-cloud/promisify');
+const request = require('teeny-request');
 const extend = require('extend');
 const is = require('is');
 const util = require('util');
@@ -89,6 +90,7 @@ class DNS extends Service {
         'https://www.googleapis.com/auth/cloud-platform',
       ],
       packageJson: require('../package.json'),
+      requestModule: request,
     };
     super(config, options);
   }
@@ -274,8 +276,6 @@ class DNS extends Service {
     return new Zone(this, name);
   }
 }
-
-util.inherits(DNS, Service);
 
 /**
  * Get {@link Zone} objects for all of the zones in your project as
