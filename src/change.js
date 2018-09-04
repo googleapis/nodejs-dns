@@ -18,6 +18,7 @@
 
 const {ServiceObject} = require('@google-cloud/common');
 const {promisifyAll} = require('@google-cloud/promisify');
+const request = require('teeny-request');
 
 /**
  * @class
@@ -179,6 +180,7 @@ class Change extends ServiceObject {
        */
       id: id,
       methods: methods,
+      requestModule: request,
     });
   }
   /**
