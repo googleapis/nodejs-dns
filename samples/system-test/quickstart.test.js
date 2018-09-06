@@ -68,7 +68,9 @@ test.cb(`should list zones`, t => {
 
   setTimeout(() => {
     proxyquire(`../quickstart`, {
-      '@google-cloud/dns': sinon.stub().returns(dnsMock),
+      '@google-cloud/dns': {
+        DNS: sinon.stub().returns(dnsMock),
+      },
     });
   }, 5000);
 });
