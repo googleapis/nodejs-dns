@@ -18,7 +18,7 @@
 function listZones() {
   // [START dns_list_zones]
   // Imports the Google Cloud client library
-  const DNS = require('@google-cloud/dns');
+  const {DNS} = require('@google-cloud/dns');
 
   // Creates a client
   const dns = new DNS();

@@ -15,7 +15,7 @@
 
 'use strict';
 
-const DNS = require(`@google-cloud/dns`);
+const {DNS} = require(`@google-cloud/dns`);
 const path = require(`path`);
 const test = require(`ava`);
 const tools = require(`@google-cloud/nodejs-repo-tools`);
