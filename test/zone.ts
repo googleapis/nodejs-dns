@@ -58,8 +58,8 @@ const fakeFs = {
 class FakeChange {
   calledWith_: IArguments;
   constructor() {
-  this.calledWith_ = arguments;
-}
+    this.calledWith_ = arguments;
+  }
 }
 
 class FakeRecord {
@@ -360,7 +360,6 @@ describe('Zone', () => {
         zone.delete({force: true}, assert.ifError);
       });
     });
-
   });
 
   describe('deleteRecords', () => {
