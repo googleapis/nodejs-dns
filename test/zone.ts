@@ -55,12 +55,15 @@ const fakeFs = {
   },
 };
 
-function FakeChange() {
+class FakeChange {
+  calledWith_: IArguments;
+  constructor() {
   this.calledWith_ = arguments;
+}
 }
 
 class FakeRecord {
-  calledWith_;
+  calledWith_: IArguments;
   constructor() {
     this.calledWith_ = arguments;
   }
@@ -358,13 +361,6 @@ describe('Zone', () => {
       });
     });
 
-    it.skip('should make the correct API request', done => {
-      FakeServiceObject.prototype.delete = callback => {
-        assert.strictEqual(this, zone);
-        callback!(null);
-      };
-      zone.delete(done);
-    });
   });
 
   describe('deleteRecords', () => {
