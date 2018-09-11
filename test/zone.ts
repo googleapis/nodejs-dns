@@ -263,10 +263,9 @@ describe('Zone', () => {
       ];
 
       zone.request = (reqOpts: CoreOptions) => {
-        const expectedRRDatas =
+        const expectedRRDatas = flatten(
             // tslint:disable-next-line:no-any
-            flatten(
-                recordsToAdd.map(x => x.toJSON()).map((x: any) => x!.rrdatas));
+            recordsToAdd.map(x => x.toJSON()).map((x: any) => x!.rrdatas));
 
         assert.deepStrictEqual(reqOpts.json.additions, [
           {
