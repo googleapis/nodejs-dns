@@ -43,6 +43,8 @@ export interface GetZonesCallback {
    apiResponse?: Response): void;
 }
 
+export type GetZonesResponse = [Zone[], GetZonesRequest | null, Response];
+
 export interface GetZoneCallback {
   (err: Error|null, zone?: Zone|null, apiResponse?: Response): void;
 }
@@ -52,6 +54,8 @@ export interface CreateZoneRequest {
   description?: string;
   name?: string;
 }
+
+export type CreateZoneResponse = [Zone, Response];
 
 /**
  * @typedef {object} ClientConfig
@@ -215,12 +219,12 @@ class DNS extends Service {
    * });
    */
   createZone(name: string, config: CreateZoneRequest):
-      Promise<[Zone, Response]>;
+      Promise<CreateZoneResponse>;
   createZone(
       name: string, config: CreateZoneRequest, callback: GetZoneCallback): void;
   createZone(
       name: string, config: CreateZoneRequest,
-      callback?: GetZoneCallback): void|Promise<[Zone, Response]> {
+      callback?: GetZoneCallback): void|Promise<CreateZoneResponse> {
     if (!name) {
       throw new Error('A zone name is required.');
     }
@@ -291,14 +295,12 @@ class DNS extends Service {
    *   const zones = data[0];
    * });
    */
-  getZones(query?: GetZonesRequest):
-      Promise<[Zone[], GetZonesRequest|null, Response]>;
+  getZones(query?: GetZonesRequest): Promise<GetZonesResponse>;
   getZones(callback: GetZonesCallback): void;
   getZones(query: GetZonesRequest, callback: GetZonesCallback): void;
   getZones(
       queryOrCallback?: GetZonesRequest|GetZonesCallback,
-      callback?: GetZonesCallback):
-      void|Promise<[Zone[], GetZonesRequest|null, Response]> {
+      callback?: GetZonesCallback): void|Promise<GetZonesResponse> {
     const query = typeof queryOrCallback === 'object' ? queryOrCallback : {};
     callback =
         typeof queryOrCallback === 'function' ? queryOrCallback : callback;
