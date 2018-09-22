@@ -213,8 +213,13 @@ class DNS extends Service {
    *   const apiResponse = data[1];
    * });
    */
+  createZone(name: string, config: CreateZoneRequest):
+      Promise<[Zone, Response]>;
   createZone(
-      name: string, config: CreateZoneRequest, callback?: GetZoneCallback) {
+      name: string, config: CreateZoneRequest, callback: GetZoneCallback): void;
+  createZone(
+      name: string, config: CreateZoneRequest,
+      callback?: GetZoneCallback): void|Promise<[Zone, Response]> {
     if (!name) {
       throw new Error('A zone name is required.');
     }
@@ -285,11 +290,14 @@ class DNS extends Service {
    *   const zones = data[0];
    * });
    */
+  getZones(query?: GetZonesRequest):
+      Promise<[Zone[], GetZonesRequest|null, Response]>;
   getZones(callback: GetZonesCallback): void;
   getZones(query: GetZonesRequest, callback: GetZonesCallback): void;
   getZones(
-      queryOrCallback: GetZonesRequest|GetZonesCallback,
-      callback?: GetZonesCallback): void {
+      queryOrCallback?: GetZonesRequest|GetZonesCallback,
+      callback?: GetZonesCallback):
+      void|Promise<[Zone[], GetZonesRequest|null, Response]> {
     const query = typeof queryOrCallback === 'object' ? queryOrCallback : {};
     callback =
         typeof queryOrCallback === 'function' ? queryOrCallback : callback;
@@ -308,7 +316,7 @@ class DNS extends Service {
             zoneInstance.metadata = zone;
             return zoneInstance;
           });
-          let nextQuery: {}|null = null;
+          let nextQuery: GetZonesRequest|null = null;
           if (resp.nextPageToken) {
             nextQuery = extend({}, query, {
               pageToken: resp.nextPageToken,
