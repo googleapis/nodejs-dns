@@ -39,7 +39,7 @@ export interface DNSConfig extends GoogleAuthOptions {
 }
 
 export interface GetZonesCallback {
-  (err: Error|null, zones: Zone[]|null, nextQuery?: {}|null,
+  (err: Error|null, zones: Zone[]|null, nextQuery?: GetZonesRequest|null,
    apiResponse?: Response): void;
 }
 
