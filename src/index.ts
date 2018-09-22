@@ -39,9 +39,11 @@ export interface DNSConfig extends GoogleAuthOptions {
 }
 
 export interface GetZonesCallback {
-  (err: Error|null, zones: Zone[]|null, nextQuery?: {}|null,
+  (err: Error|null, zones: Zone[]|null, nextQuery?: GetZonesRequest|null,
    apiResponse?: Response): void;
 }
+
+export type GetZonesResponse = [Zone[], GetZonesRequest | null, Response];
 
 export interface GetZoneCallback {
   (err: Error|null, zone?: Zone|null, apiResponse?: Response): void;
@@ -52,6 +54,8 @@ export interface CreateZoneRequest {
   description?: string;
   name?: string;
 }
+
+export type CreateZoneResponse = [Zone, Response];
 
 /**
  * @typedef {object} ClientConfig
@@ -80,11 +84,12 @@ export interface CreateZoneRequest {
  *     native Promises.
  */
 /**
- * [Cloud DNS](https://cloud.google.com/dns/what-is-cloud-dns) is a high-
- * performance, resilient, global DNS service that provides a cost-effective way
- * to make your applications and services available to your users. This
- * programmable, authoritative DNS service can be used to easily publish and
- * manage DNS records using the same infrastructure relied upon by Google.
+ * [Cloud DNS](https://cloud.google.com/dns/what-is-cloud-dns) is a
+ * high-performance, resilient, global DNS service that provides a
+ * cost-effective way to make your applications and services available to your
+ * users. This programmable, authoritative DNS service can be used to easily
+ * publish and manage DNS records using the same infrastructure relied upon by
+ * Google.
  *
  * @class
  *
@@ -213,8 +218,13 @@ class DNS extends Service {
    *   const apiResponse = data[1];
    * });
    */
+  createZone(name: string, config: CreateZoneRequest):
+      Promise<CreateZoneResponse>;
   createZone(
-      name: string, config: CreateZoneRequest, callback?: GetZoneCallback) {
+      name: string, config: CreateZoneRequest, callback: GetZoneCallback): void;
+  createZone(
+      name: string, config: CreateZoneRequest,
+      callback?: GetZoneCallback): void|Promise<CreateZoneResponse> {
     if (!name) {
       throw new Error('A zone name is required.');
     }
@@ -285,11 +295,12 @@ class DNS extends Service {
    *   const zones = data[0];
    * });
    */
+  getZones(query?: GetZonesRequest): Promise<GetZonesResponse>;
   getZones(callback: GetZonesCallback): void;
   getZones(query: GetZonesRequest, callback: GetZonesCallback): void;
   getZones(
-      queryOrCallback: GetZonesRequest|GetZonesCallback,
-      callback?: GetZonesCallback): void {
+      queryOrCallback?: GetZonesRequest|GetZonesCallback,
+      callback?: GetZonesCallback): void|Promise<GetZonesResponse> {
     const query = typeof queryOrCallback === 'object' ? queryOrCallback : {};
     callback =
         typeof queryOrCallback === 'function' ? queryOrCallback : callback;
@@ -308,7 +319,7 @@ class DNS extends Service {
             zoneInstance.metadata = zone;
             return zoneInstance;
           });
-          let nextQuery: {}|null = null;
+          let nextQuery: GetZonesRequest|null = null;
           if (resp.nextPageToken) {
             nextQuery = extend({}, query, {
               pageToken: resp.nextPageToken,
