@@ -19,7 +19,7 @@
 import * as arrify from 'arrify';
 import {promisifyAll} from '@google-cloud/promisify';
 import * as extend from 'extend';
-import {ChangeCallback, Change} from './change';
+import {CreateChangeCallback, Change} from './change';
 import {Zone} from './zone';
 const format = require('string-format-obj');
 import * as r from 'request';
@@ -152,8 +152,8 @@ export class Record implements RecordObject {
    * });
    */
   delete(): Promise<DeleteRecordResponse>;
-  delete(callback: ChangeCallback): void;
-  delete(callback?: ChangeCallback): void|Promise<DeleteRecordResponse> {
+  delete(callback: CreateChangeCallback): void;
+  delete(callback?: CreateChangeCallback): void|Promise<DeleteRecordResponse> {
     this.zone_.deleteRecords(this, callback!);
   }
   /**

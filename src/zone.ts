@@ -110,7 +110,7 @@ export type CreateChangeResponse = [Change, r.Response];
  * @param {object} apiResponse The full API response.
  */
 export interface CreateChangeCallback {
-  (err: Error|null, change?: Change, apiResponse?: r.Response);
+  (err: Error|null, change?: Change, apiResponse?: r.Response): void;
 }
 
 /**

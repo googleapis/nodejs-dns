@@ -24,7 +24,7 @@ import * as fs from 'fs';
 const tmp = require('tmp');
 import * as uuid from 'uuid';
 import {DNS} from '../src';
-import {ChangeCallback} from '../src/change';
+import {CreateChangeCallback} from '../src/change';
 import {Record} from '../src';
 import {Response} from 'request';
 
@@ -217,9 +217,9 @@ describe('dns', () => {
         assert.ifError(err);
         async.series(
             [
-              next => ZONE.empty(next as ChangeCallback),
+              next => ZONE.empty(next as CreateChangeCallback),
               next => ZONE.addRecords(
-                  [records.spf, records.srv], next as ChangeCallback),
+                  [records.spf, records.srv], next as CreateChangeCallback),
               next => ZONE.export(tmpFilename, next)
             ],
             done);
