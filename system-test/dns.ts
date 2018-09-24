@@ -315,8 +315,7 @@ describe('dns', () => {
     it('should replace records', async () => {
       const name = 'test-zone-' + uuid.v4().substr(0, 18);
       // Do this in a new zone so no existing records are affected.
-      // tslint:disable-next-line:no-any
-      const [zone] = await (dns as any).createZone(name, {dnsName: DNS_DOMAIN});
+      const [zone] = await dns.createZone(name, {dnsName: DNS_DOMAIN});
       const [originalRecords] = await zone.getRecords('ns');
       const originalData = originalRecords[0].data;
       const newRecord = zone.record('ns', {
