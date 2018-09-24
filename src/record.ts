@@ -52,8 +52,9 @@ export type DeleteRecordResponse = [Change, r.Response];
  * @param {?Change} change A {@link Change} object.
  * @param {object} apiResponse The full API response.
  */
-export type DeleteRecordCallback =
-    (err: Error|null, change?: Change, apiResponse?: r.Response) => void;
+export interface DeleteRecordCallback {
+  (err: Error|null, change?: Change, apiResponse?: r.Response): void;
+}
 
 /**
  * Create a Resource Record object.
