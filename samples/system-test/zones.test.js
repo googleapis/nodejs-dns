@@ -43,7 +43,7 @@ describe('Zones', () => {
   it(`should list zones`, async () => {
     //t.plan(0);
     await tools
-      .tryTest(async assert => {
+      .tryTest(async () => {
         const output = await tools.runAsync(`${cmd} list`, cwd);
         assert(output.includes(`Zones:`));
         assert(output.includes(zoneName));
