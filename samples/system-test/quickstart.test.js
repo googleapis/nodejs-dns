@@ -54,7 +54,9 @@ describe('QuickStart', () => {
               assert.ok(console.log.called);
               assert.deepStrictEqual(console.log.getCall(0).args, [`Zones:`]);
               zones.forEach((zone, i) => {
-                assert.deepStrictEqual(console.log.getCall(i + 1).args, [zone.name]);
+                assert.deepStrictEqual(console.log.getCall(i + 1).args, [
+                  zone.name,
+                ]);
               });
               done();
             } catch (err) {
