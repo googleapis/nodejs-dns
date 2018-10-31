@@ -9,7 +9,7 @@
     "node": ">=8"
   },
   "scripts": {
-    "test": "mocha system-test/*.js --timeout 600000"
+    "test": "mocha system-test/*.js --timeout 10000"
   },
   "dependencies": {
     "@google-cloud/dns": "^0.8.0",
