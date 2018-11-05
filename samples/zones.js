@@ -15,7 +15,7 @@
 
 'use strict';
 
-function listZones() {
+async function listZones() {
   // [START dns_list_zones]
   // Imports the Google Cloud client library
   const {DNS} = require('@google-cloud/dns');
@@ -24,16 +24,9 @@ function listZones() {
   const dns = new DNS();
 
   // Lists all zones in the current project
-  dns
-    .getZones()
-    .then(results => {
-      const zones = results[0];
-      console.log('Zones:');
-      zones.forEach(zone => console.log(zone.name));
-    })
-    .catch(err => {
-      console.error('ERROR:', err);
-    });
+  const [zones] = await dns.getZones();
+  console.log('Zones:');
+  zones.forEach(zone => console.log(zone.name));
   // [END dns_list_zones]
 }
 
