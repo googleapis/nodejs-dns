@@ -34,11 +34,7 @@ describe('Zones', () => {
     });
   });
 
-  after(async () => {
-    try {
-      await dns.zone(zoneName).delete();
-    } catch (err) {} // ignore error
-  });
+  after(async () => await dns.zone(zoneName).delete());
 
   it(`should list zones`, async () => {
     await tools

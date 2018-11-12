@@ -27,17 +27,14 @@ const uuid = require(`uuid`);
 const zoneName = `test-${uuid().substring(0, 13)}`;
 
 describe('QuickStart', () => {
-  before(async () => {
-    await dns.createZone(zoneName, {
-      dnsName: `${process.env.GCLOUD_PROJECT}.appspot.com.`,
-    });
-  });
+  before(
+    async () =>
+      await dns.createZone(zoneName, {
+        dnsName: `${process.env.GCLOUD_PROJECT}.appspot.com.`,
+      })
+  );
 
-  after(async () => {
-    try {
-      await dns.zone(zoneName).delete();
-    } catch (err) {} // ignore error
-  });
+  after(async () => await dns.zone(zoneName).delete());
 
   beforeEach(tools.stubConsole);
   afterEach(tools.restoreConsole);
@@ -50,15 +47,13 @@ describe('QuickStart', () => {
 
           // Listing is eventually consistent, give the indexes time to update
           await new Promise(r => setTimeout(r, 200));
-          try {
-            assert.ok(console.log.called);
-            assert.deepStrictEqual(console.log.getCall(0).args, [`Zones:`]);
-            zones.forEach((zone, i) => {
-              assert.deepStrictEqual(console.log.getCall(i + 1).args, [
-                zone.name,
-              ]);
-            });
-          } catch (err) {}
+          assert.ok(console.log.called);
+          assert.deepStrictEqual(console.log.getCall(0).args, [`Zones:`]);
+          zones.forEach((zone, i) => {
+            assert.deepStrictEqual(console.log.getCall(i + 1).args, [
+              zone.name,
+            ]);
+          });
 
           return [zones];
         });
