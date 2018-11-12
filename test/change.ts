@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-'use strict';
-
-import * as assert from 'assert';
-import * as extend from 'extend';
-import * as proxyquire from 'proxyquire';
 import {ServiceObject, ServiceObjectConfig} from '@google-cloud/common';
 import * as promisify from '@google-cloud/promisify';
+import * as assert from 'assert';
+import * as proxyquire from 'proxyquire';
 import {Response} from 'request';
+
 import {Change} from '../src/change';
 
 let promisified = false;
-const fakePromisify = extend({}, promisify, {
+const fakePromisify = Object.assign({}, promisify, {
   promisifyAll(esClass: Function) {
     if (esClass.name === 'Change') {
       promisified = true;

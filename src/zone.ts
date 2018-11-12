@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-'use strict';
-
-import * as arrify from 'arrify';
-import {ServiceObject, DeleteCallback} from '@google-cloud/common';
+import {DeleteCallback, ServiceObject} from '@google-cloud/common';
 import {paginator} from '@google-cloud/paginator';
 import {promisifyAll} from '@google-cloud/promisify';
-import * as extend from 'extend';
-const flatten = require('lodash.flatten');
+import * as arrify from 'arrify';
 import * as fs from 'fs';
+
 import groupBy = require('lodash.groupby');
-import * as is from 'is';
 import {teenyRequest} from 'teeny-request';
 const zonefile = require('dns-zonefile');
 
@@ -436,18 +432,19 @@ class Zone extends ServiceObject {
         // tslint:disable-next-line:forin
         for (const recordName in recordsByName) {
           const records = recordsByName[recordName];
-          const templateRecord = extend({}, records[0]);
+          const templateRecord = Object.assign({}, records[0]);
           if (records.length > 1) {
             // Combine the `rrdatas` values from all records of the same type.
             templateRecord.rrdatas =
-                flatten(records.map((x: RecordObject) => x.rrdatas));
+                records.map(x => x.rrdatas)
+                    .reduce((acc, rrdata) => acc!.concat(rrdata!), []);
           }
           recordsOut.push(templateRecord);
         }
       }
       return recordsOut;
     };
-    const body = extend(
+    const body = Object.assign(
         {
           additions: groupByType(arrify(config.add).map(x => x.toJSON())),
           deletions: groupByType(arrify(config.delete).map(x => x.toJSON())),
@@ -627,7 +624,7 @@ class Zone extends ServiceObject {
       records = arrify<Record|string>(recordsOrCallback);
     }
 
-    if (is.string(records[0])) {
+    if (typeof records[0] === 'string') {
       this.deleteRecordsByType_(records as string[], callback!);
       return;
     }
@@ -776,7 +773,7 @@ class Zone extends ServiceObject {
           });
           let nextQuery = null;
           if (resp.nextPageToken) {
-            nextQuery = extend({}, query, {
+            nextQuery = Object.assign({}, query, {
               pageToken: resp.nextPageToken,
             });
           }
@@ -891,7 +888,7 @@ class Zone extends ServiceObject {
       query = queryOrCallback!;
     }
 
-    if (is.string(query) || is.array(query)) {
+    if (typeof query === 'string' || Array.isArray(query)) {
       const filterByTypes_: {[index: string]: boolean} = {};
       // For faster lookups, store the record types the user wants in an object.
       arrify(query as string).forEach(type => {
@@ -901,7 +898,7 @@ class Zone extends ServiceObject {
         filterByTypes_,
       };
     }
-    const requestQuery = extend({}, query) as GetRecordsRequest;
+    const requestQuery = Object.assign({}, query) as GetRecordsRequest;
     delete requestQuery.filterByTypes_;
     this.request(
         {
@@ -923,7 +920,7 @@ class Zone extends ServiceObject {
           }
           let nextQuery: {}|null = null;
           if (resp.nextPageToken) {
-            nextQuery = extend({}, query, {
+            nextQuery = Object.assign({}, query, {
               pageToken: resp.nextPageToken,
             });
           }

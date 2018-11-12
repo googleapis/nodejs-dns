@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-'use strict';
-
-import * as arrify from 'arrify';
 import {promisifyAll} from '@google-cloud/promisify';
-import * as extend from 'extend';
-import {CreateChangeCallback, Change} from './change';
+import * as arrify from 'arrify';
+import {Change, CreateChangeCallback} from './change';
 import {Zone} from './zone';
+
 const format = require('string-format-obj');
 import * as r from 'request';
 
@@ -103,7 +101,7 @@ export class Record implements RecordObject {
      * @property {number} metadata.ttl
      */
     this.metadata = metadata;
-    extend(this, this.toJSON());
+    Object.assign(this, this.toJSON());
     if (this.rrdatas) {
       /**
        * @name Record#data
@@ -162,7 +160,7 @@ export class Record implements RecordObject {
    * @returns {object}
    */
   toJSON() {
-    const recordObject: RecordObject = extend({}, this.metadata, {
+    const recordObject: RecordObject = Object.assign({}, this.metadata, {
       type: this.type.toUpperCase(),
     });
     if (recordObject.data) {

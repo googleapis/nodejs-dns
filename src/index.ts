@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-'use strict';
-
-import {Stream} from 'stream';
-import * as arrify from 'arrify';
-import {Service, GoogleAuthOptions} from '@google-cloud/common';
+import {GoogleAuthOptions, Service} from '@google-cloud/common';
 import {paginator} from '@google-cloud/paginator';
 import {promisifyAll} from '@google-cloud/promisify';
-import * as extend from 'extend';
-import {teenyRequest} from 'teeny-request';
-import {Zone} from './zone';
+import * as arrify from 'arrify';
 import * as r from 'request';
+import {Stream} from 'stream';
+import {teenyRequest} from 'teeny-request';
+
+import {Zone} from './zone';
+
 export {Record, RecordMetadata} from './record';
 
 export interface GetZonesRequest {
@@ -323,7 +322,7 @@ class DNS extends Service {
           });
           let nextQuery: GetZonesRequest|null = null;
           if (resp.nextPageToken) {
-            nextQuery = extend({}, query, {
+            nextQuery = Object.assign({}, query, {
               pageToken: resp.nextPageToken,
             });
           }
