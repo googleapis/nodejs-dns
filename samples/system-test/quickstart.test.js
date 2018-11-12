@@ -17,7 +17,7 @@
 
 const proxyquire = require(`proxyquire`).noPreserveCache();
 const sinon = require(`sinon`);
-const test = require(`ava`);
+const assert = require(`assert`);
 const tools = require(`@google-cloud/nodejs-repo-tools`);
 
 const {DNS} = proxyquire(`@google-cloud/dns`, {});
@@ -26,51 +26,45 @@ const dns = new DNS();
 const uuid = require(`uuid`);
 const zoneName = `test-${uuid().substring(0, 13)}`;
 
-test.before(async () => {
-  await dns.createZone(zoneName, {
-    dnsName: `${process.env.GCLOUD_PROJECT}.appspot.com.`,
-  });
-});
+describe('QuickStart', () => {
+  before(
+    async () =>
+      await dns.createZone(zoneName, {
+        dnsName: `${process.env.GCLOUD_PROJECT}.appspot.com.`,
+      })
+  );
 
-test.after.always(async () => {
-  try {
-    await dns.zone(zoneName).delete();
-  } catch (err) {} // ignore error
-});
+  after(async () => await dns.zone(zoneName).delete());
 
-test.beforeEach(tools.stubConsole);
-test.afterEach.always(tools.restoreConsole);
+  beforeEach(tools.stubConsole);
+  afterEach(tools.restoreConsole);
 
-test.cb(`should list zones`, t => {
-  const dnsMock = {
-    getZones: () => {
-      return dns.getZones().then(([zones]) => {
-        t.true(Array.isArray(zones));
+  it(`should list zones`, async () => {
+    const dnsMock = {
+      getZones: () => {
+        return dns.getZones().then(async ([zones]) => {
+          assert.ok(Array.isArray(zones));
 
-        // Listing is eventually consistent, give the indexes time to update
-        setTimeout(() => {
-          try {
-            t.true(console.log.called);
-            t.deepEqual(console.log.getCall(0).args, [`Zones:`]);
-            zones.forEach((zone, i) => {
-              t.deepEqual(console.log.getCall(i + 1).args, [zone.name]);
-            });
-            t.end();
-          } catch (err) {
-            t.end(err);
-          }
-        }, 200);
+          // Listing is eventually consistent, give the indexes time to update
+          await new Promise(r => setTimeout(r, 200));
+          assert.ok(console.log.called);
+          assert.deepStrictEqual(console.log.getCall(0).args, [`Zones:`]);
+          zones.forEach((zone, i) => {
+            assert.deepStrictEqual(console.log.getCall(i + 1).args, [
+              zone.name,
+            ]);
+          });
 
-        return [zones];
-      });
-    },
-  };
+          return [zones];
+        });
+      },
+    };
 
-  setTimeout(() => {
+    await new Promise(r => setTimeout(r, 5000));
     proxyquire(`../quickstart`, {
       '@google-cloud/dns': {
         DNS: sinon.stub().returns(dnsMock),
       },
     });
-  }, 5000);
+  });
 });

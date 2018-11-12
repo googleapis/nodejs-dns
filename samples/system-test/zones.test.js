@@ -17,7 +17,7 @@
 
 const {DNS} = require(`@google-cloud/dns`);
 const path = require(`path`);
-const test = require(`ava`);
+const assert = require(`assert`);
 const tools = require(`@google-cloud/nodejs-repo-tools`);
 const uuid = require(`uuid`);
 
@@ -26,26 +26,23 @@ const cwd = path.join(__dirname, `..`);
 const cmd = `node zones.js`;
 const dns = new DNS();
 
-test.before(tools.checkCredentials);
-test.before(async () => {
-  await dns.createZone(zoneName, {
-    dnsName: `${process.env.GCLOUD_PROJECT}.appspot.com.`,
+describe('Zones', () => {
+  before(async () => {
+    tools.checkCredentials();
+    await dns.createZone(zoneName, {
+      dnsName: `${process.env.GCLOUD_PROJECT}.appspot.com.`,
+    });
   });
-});
 
-test.after.always(async () => {
-  try {
-    await dns.zone(zoneName).delete();
-  } catch (err) {} // ignore error
-});
+  after(async () => await dns.zone(zoneName).delete());
 
-test(`should list zones`, async t => {
-  t.plan(0);
-  await tools
-    .tryTest(async assert => {
-      const output = await tools.runAsync(`${cmd} list`, cwd);
-      assert(output.includes(`Zones:`));
-      assert(output.includes(zoneName));
-    })
-    .start();
+  it(`should list zones`, async () => {
+    await tools
+      .tryTest(async () => {
+        const output = await tools.runAsync(`${cmd} list`, cwd);
+        assert(output.includes(`Zones:`));
+        assert(output.includes(zoneName));
+      })
+      .start();
+  });
 });
