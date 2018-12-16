@@ -15,34 +15,29 @@
 
 'use strict';
 
-const {DNS} = require(`@google-cloud/dns`);
-const path = require(`path`);
-const assert = require(`assert`);
-const tools = require(`@google-cloud/nodejs-repo-tools`);
-const uuid = require(`uuid`);
+const {DNS} = require('@google-cloud/dns');
+const path = require('path');
+const {assert} = require('chai');
+const execa = require('execa');
+const uuid = require('uuid');
 
 const zoneName = `test-${uuid().substr(0, 13)}`;
-const cwd = path.join(__dirname, `..`);
-const cmd = `node zones.js`;
+const cwd = path.join(__dirname, '..');
+const cmd = 'node zones.js';
 const dns = new DNS();
 
 describe('Zones', () => {
   before(async () => {
-    tools.checkCredentials();
     await dns.createZone(zoneName, {
       dnsName: `${process.env.GCLOUD_PROJECT}.appspot.com.`,
     });
   });
 
-  after(async () => await dns.zone(zoneName).delete());
+  after(async () => dns.zone(zoneName).delete());
 
-  it(`should list zones`, async () => {
-    await tools
-      .tryTest(async () => {
-        const output = await tools.runAsync(`${cmd} list`, cwd);
-        assert(output.includes(`Zones:`));
-        assert(output.includes(zoneName));
-      })
-      .start();
+  it('should list zones', async () => {
+    const {stdout} = await execa.shell(`${cmd} list`, {cwd});
+    assert.match(stdout, /Zones:/);
+    assert.match(stdout, new RegExp(zoneName));
   });
 });
