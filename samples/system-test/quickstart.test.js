@@ -15,56 +15,16 @@
 
 'use strict';
 
-const proxyquire = require(`proxyquire`).noPreserveCache();
-const sinon = require(`sinon`);
-const assert = require(`assert`);
-const tools = require(`@google-cloud/nodejs-repo-tools`);
+const execa = require('execa');
+const {assert} = require('chai');
+const path = require('path');
 
-const {DNS} = proxyquire(`@google-cloud/dns`, {});
-const dns = new DNS();
-
-const uuid = require(`uuid`);
-const zoneName = `test-${uuid().substring(0, 13)}`;
+const cwd = path.join(__dirname, '..');
+const projectId = process.env.GCLOUD_PROJECT;
 
 describe('QuickStart', () => {
-  before(
-    async () =>
-      await dns.createZone(zoneName, {
-        dnsName: `${process.env.GCLOUD_PROJECT}.appspot.com.`,
-      })
-  );
-
-  after(async () => await dns.zone(zoneName).delete());
-
-  beforeEach(tools.stubConsole);
-  afterEach(tools.restoreConsole);
-
-  it(`should list zones`, async () => {
-    const dnsMock = {
-      getZones: () => {
-        return dns.getZones().then(async ([zones]) => {
-          assert.ok(Array.isArray(zones));
-
-          // Listing is eventually consistent, give the indexes time to update
-          await new Promise(r => setTimeout(r, 200));
-          assert.ok(console.log.called);
-          assert.deepStrictEqual(console.log.getCall(0).args, [`Zones:`]);
-          zones.forEach((zone, i) => {
-            assert.deepStrictEqual(console.log.getCall(i + 1).args, [
-              zone.name,
-            ]);
-          });
-
-          return [zones];
-        });
-      },
-    };
-
-    await new Promise(r => setTimeout(r, 5000));
-    proxyquire(`../quickstart`, {
-      '@google-cloud/dns': {
-        DNS: sinon.stub().returns(dnsMock),
-      },
-    });
+  it('should list zones', async () => {
+    const {stdout} = await execa.shell(`node quickstart ${projectId}`, {cwd});
+    assert.match(stdout, /Zones:/);
   });
 });
