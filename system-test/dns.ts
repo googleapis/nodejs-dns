@@ -24,7 +24,7 @@ import * as uuid from 'uuid';
 const format = require('string-format-obj');
 
 import {DNS, Record} from '../src';
-import { Metadata } from '@google-cloud/common';
+import {Metadata} from '@google-cloud/common';
 
 const dns = new DNS();
 const DNS_DOMAIN = process.env.GCLOUD_TESTS_DNS_DOMAIN || 'gitnpm.com.';
