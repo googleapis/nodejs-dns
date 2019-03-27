@@ -1,111 +1,79 @@
+[//]: # "This README.md file is auto-generated, all changes to this file will be lost."
+[//]: # "To regenerate it, use `python -m synthtool`."
 <img src="https://avatars2.githubusercontent.com/u/2810941?v=3&s=96" alt="Google Cloud Platform logo" title="Google Cloud Platform" align="right" height="96" width="96"/>
 
-# [Google Cloud DNS: Node.js Client](https://github.com/googleapis/nodejs-dns)
+# [:  Client](https://github.com/)
 
-[![release level](https://img.shields.io/badge/release%20level-alpha-orange.svg?style&#x3D;flat)](https://cloud.google.com/terms/launch-stages)
+None
 [![npm version](https://img.shields.io/npm/v/@google-cloud/dns.svg)](https://www.npmjs.org/package/@google-cloud/dns)
-[![codecov](https://img.shields.io/codecov/c/github/googleapis/nodejs-dns/master.svg?style=flat)](https://codecov.io/gh/googleapis/nodejs-dns)
-
-> Node.js idiomatic client for [Cloud DNS][product-docs].
-
-[Cloud DNS](https://cloud.google.com/dns/docs/) allows you to publish your domain names using Google&#x27;s infrastructure for production-quality, high-volume DNS services. Google&#x27;s global network of anycast name servers provide reliable, low-latency authoritative name lookups for your domains from anywhere in the world.
+[![codecov](https://img.shields.io/codecov/c/github//master.svg?style=flat)](https://codecov.io/gh/)
 
 
-* [Cloud DNS Node.js Client API Reference][client-docs]
-* [github.com/googleapis/nodejs-dns](https://github.com/googleapis/nodejs-dns)
-* [Cloud DNS Documentation][product-docs]
+Cloud DNS Client Library for Node.js
 
-Read more about the client libraries for Cloud APIs, including the older
-Google APIs Client Libraries, in [Client Libraries Explained][explained].
 
-[explained]: https://cloud.google.com/apis/docs/client-libraries-explained
-
-**Table of contents:**
-
-* [Quickstart](#quickstart)
-  * [Before you begin](#before-you-begin)
-  * [Installing the client library](#installing-the-client-library)
-  * [Using the client library](#using-the-client-library)
+* [Using the client library](#using-the-client-library)
 * [Samples](#samples)
 * [Versioning](#versioning)
 * [Contributing](#contributing)
 * [License](#license)
 
-## Quickstart
+## Using the client library
 
-### Before you begin
-
-1.  Select or create a Cloud Platform project.
-
-    [Go to the projects page][projects]
-
-1.  Enable billing for your project.
-
-    [Enable billing][billing]
-
-1.  Enable the Google Cloud DNS API.
-
-    [Enable the API][enable_api]
-
+1.  [Select or create a Cloud Platform project][projects].
+1.  [Enable the  API][enable_api].
 1.  [Set up authentication with a service account][auth] so you can access the
     API from your local workstation.
 
-[projects]: https://console.cloud.google.com/project
-[billing]: https://support.google.com/cloud/answer/6293499#enable-billing
-[enable_api]: https://console.cloud.google.com/flows/enableapi?apiid=dns.googleapis.com
-[auth]: https://cloud.google.com/docs/authentication/getting-started
+1. Install the client library:
 
-### Installing the client library
+        npm install @google-cloud/dns
 
-    npm install --save @google-cloud/dns
 
-### Using the client library
+1. Try an example:
 
-```javascript
-// Imports the Google Cloud client library
-const {DNS} = require('@google-cloud/dns');
-
-// Your Google Cloud Platform project ID
-const projectId = 'YOUR_PROJECT_ID';
-
-// Creates a client
-const dns = new DNS({
-  projectId: projectId,
-});
-
-// Lists all zones in the current project
-dns
-  .getZones()
-  .then(results => {
-    const zones = results[0];
-
-    console.log('Zones:');
-    zones.forEach(zone => console.log(zone.name));
-  })
-  .catch(err => {
-    console.error('ERROR:', err);
-  });
 ```
+async function quickstart(
+  projectId = 'YOUR_PROJECT_ID' // Your GCP project Id
+) {
+  // Imports the Google Cloud client library
+  const {DNS} = require('@google-cloud/dns');
+
+  // Creates a client
+  const dns = new DNS({projectId});
+
+  // Lists all zones in the current project
+  const [zones] = await dns.getZones();
+  console.log('Zones:');
+  zones.forEach(zone => console.log(zone.name));
+}
+
+```
+
+
 
 ## Samples
 
-Samples are in the [`samples/`](https://github.com/googleapis/nodejs-dns/tree/master/samples) directory. The samples' `README.md`
+Samples are in the [`samples/`](https://github.com//tree/master/samples) directory. The samples' `README.md`
 has instructions for running the samples.
 
 | Sample                      | Source Code                       | Try it |
 | --------------------------- | --------------------------------- | ------ |
-| Zones | [source code](https://github.com/googleapis/nodejs-dns/blob/master/samples/zones.js) | [![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/nodejs-dns&page=editor&open_in_editor=samples/zones.js,samples/README.md) |
+| Zones | [source code](https://github.com//blob/master/samples/zones.js) | [![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/&page=editor&open_in_editor=samples/zones.js,samples/README.md) |
 
-The [Cloud DNS Node.js Client API Reference][client-docs] documentation
+
+
+The [  Client API Reference][client-docs] documentation
 also contains samples.
 
 ## Versioning
 
 This library follows [Semantic Versioning](http://semver.org/).
 
-This library is considered to be in **alpha**. This means it is still a
-work-in-progress and under active development. Any release is subject to
-backwards-incompatible changes at any time.
+
+
+
+
 
 More Information: [Google Cloud Platform Launch Stages][launch_stages]
 
@@ -113,15 +81,29 @@ More Information: [Google Cloud Platform Launch Stages][launch_stages]
 
 ## Contributing
 
-Contributions welcome! See the [Contributing Guide](https://github.com/googleapis/nodejs-dns/blob/master/CONTRIBUTING.md).
+Contributions welcome! See the [Contributing Guide](https://github.com//blob/master/CONTRIBUTING.md).
 
 ## License
 
 Apache Version 2.0
 
-See [LICENSE](https://github.com/googleapis/nodejs-dns/blob/master/LICENSE)
+See [LICENSE](https://github.com//blob/master/LICENSE)
 
-[client-docs]: https://cloud.google.com/nodejs/docs/reference/dns/latest/
-[product-docs]: https://cloud.google.com/dns/docs/
-[shell_img]: //gstatic.com/cloudssh/images/open-btn.png
+## What's Next
 
+* [ Documentation][product-docs]
+* [  Client API Reference][client-docs]
+* [github.com/](https://github.com/)
+
+Read more about the client libraries for Cloud APIs, including the older
+Google APIs Client Libraries, in [Client Libraries Explained][explained].
+
+[explained]: https://cloud.google.com/apis/docs/client-libraries-explained
+
+[client-docs]: 
+[product-docs]: 
+[shell_img]: https://gstatic.com/cloudssh/images/open-btn.png
+[projects]: https://console.cloud.google.com/project
+[billing]: https://support.google.com/cloud/answer/6293499#enable-billing
+[enable_api]: https://console.cloud.google.com/flows/enableapi?apiid=
+[auth]: https://cloud.google.com/docs/authentication/getting-started
