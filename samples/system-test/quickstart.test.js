@@ -15,7 +15,7 @@
 
 'use strict';
 
-const execa = require('execa');
+const {execSync} = require('child_process');
 const {assert} = require('chai');
 const path = require('path');
 
@@ -24,7 +24,7 @@ const projectId = process.env.GCLOUD_PROJECT;
 
 describe('QuickStart', () => {
   it('should list zones', async () => {
-    const {stdout} = await execa.shell(`node quickstart ${projectId}`, {cwd});
+    const stdout = execSync(`node quickstart ${projectId}`, {cwd});
     assert.match(stdout, /Zones:/);
   });
 });

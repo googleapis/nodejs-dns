@@ -18,7 +18,7 @@
 const {DNS} = require('@google-cloud/dns');
 const path = require('path');
 const {assert} = require('chai');
-const execa = require('execa');
+const {execSync} = require('child_process');
 const uuid = require('uuid');
 
 const zoneName = `test-${uuid().substr(0, 13)}`;
@@ -36,7 +36,7 @@ describe('Zones', () => {
   after(async () => dns.zone(zoneName).delete());
 
   it('should list zones', async () => {
-    const {stdout} = await execa.shell(`${cmd} list`, {cwd});
+    const stdout = execSync(`${cmd} list`, {cwd});
     assert.match(stdout, /Zones:/);
     assert.match(stdout, new RegExp(zoneName));
   });
