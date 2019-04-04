@@ -18,8 +18,10 @@
 const {DNS} = require('@google-cloud/dns');
 const path = require('path');
 const {assert} = require('chai');
-const {execSync} = require('child_process');
+const cp = require('child_process');
 const uuid = require('uuid');
+
+const execSync = (cmd) => cp.execSync(cmd, {encoding: 'utf-8'});
 
 const zoneName = `test-${uuid().substr(0, 13)}`;
 const cwd = path.join(__dirname, '..');
