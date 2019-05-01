@@ -15,29 +15,34 @@
 
 'use strict';
 
-const {DNS} = require('@google-cloud/dns');
-const path = require('path');
+const {execSync} = require('child_process');
 const {assert} = require('chai');
-const execa = require('execa');
+const {DNS} = require('@google-cloud/dns');
 const uuid = require('uuid');
 
-const zoneName = `test-${uuid().substr(0, 13)}`;
-const cwd = path.join(__dirname, '..');
-const cmd = 'node zones.js';
-const dns = new DNS();
+const exec = cmd => execSync(cmd, {encoding: 'utf8'});
 
-describe('Zones', () => {
+describe(__filename, () => {
+  const zoneName = `test-${uuid().substr(0, 13)}`;
+  const dns = new DNS();
+
   before(async () => {
-    await dns.createZone(zoneName, {
-      dnsName: `${process.env.GCLOUD_PROJECT}.appspot.com.`,
+    const projectId = await dns.getProjectId();
+    return dns.createZone(zoneName, {
+      dnsName: `${projectId}.appspot.com.`,
     });
   });
 
-  after(async () => dns.zone(zoneName).delete());
+  after(() => dns.zone(zoneName).delete());
 
-  it('should list zones', async () => {
-    const {stdout} = await execa.shell(`${cmd} list`, {cwd});
-    assert.match(stdout, /Zones:/);
-    assert.match(stdout, new RegExp(zoneName));
+  it('should run the quickstart', () => {
+    const output = exec('node quickstart');
+    assert.include(output, 'Zones:');
+  });
+
+  it('should list zones', () => {
+    const stdout = exec('node listZones');
+    assert.include(stdout, 'Zones:');
+    assert.include(stdout, zoneName);
   });
 });

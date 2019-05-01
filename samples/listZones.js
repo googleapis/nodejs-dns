@@ -15,27 +15,27 @@
 
 'use strict';
 
-// [START dns_list_zones]
-async function listZones() {
+// sample-metadata:
+//   name: List Zones
+//   description: Lists all zones in the current project.
+//   usage: node listZones
+
+async function main() {
+  // [START dns_list_zones]
   // Imports the Google Cloud client library
   const {DNS} = require('@google-cloud/dns');
 
   // Creates a client
   const dns = new DNS();
 
-  // Lists all zones in the current project
-  const [zones] = await dns.getZones();
-  console.log('Zones:');
-  zones.forEach(zone => console.log(zone.name));
+  async function listZones() {
+    // Lists all zones in the current project
+    const [zones] = await dns.getZones();
+    console.log('Zones:');
+    zones.forEach(zone => console.log(zone.name));
+  }
+  listZones();
+  // [END dns_list_zones]
 }
-// [END dns_list_zones]
 
-require(`yargs`)
-  .demand(1)
-  .command(`list`, `Lists all zones in the current project.`, {}, listZones)
-  .example(`node $0 list`, `Lists all zones in the current project.`)
-  .wrap(120)
-  .recommendCommands()
-  .epilogue(`For more information, see https://cloud.google.com/dns/docs`)
-  .help()
-  .strict().argv;
+main();
