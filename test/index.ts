@@ -143,7 +143,6 @@ describe('DNS', () => {
         apiEndpoint,
       });
       const calledWith = dns.calledWith_[0];
-      console.log(calledWith);
       assert.strictEqual(calledWith.apiEndpoint, apiEndpoint);
       assert.strictEqual(calledWith.baseUrl, `https://${apiEndpoint}/dns/v1`);
     });
