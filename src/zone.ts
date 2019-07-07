@@ -30,7 +30,12 @@ const zonefile = require('dns-zonefile');
 
 import {Change, CreateChangeCallback, CreateChangeRequest} from './change';
 import {Record, RecordMetadata, RecordObject} from './record';
-import {DNS, CreateZoneRequest} from '.';
+import {
+  DNS,
+  CreateZoneRequest,
+  CreateZoneResponse,
+  CreateZoneCallback,
+} from '.';
 import {Readable} from 'stream';
 import {InstanceResponseCallback} from '@google-cloud/common';
 import {GetResponse} from '@google-cloud/common/build/src/service-object';
@@ -356,6 +361,15 @@ class Zone extends ServiceObject<Zone> {
     this.name = name;
     this.getRecordsStream = paginator.streamify('getRecords');
     this.getChangesStream = paginator.streamify('getChanges');
+  }
+
+  create(options: CreateZoneRequest): Promise<CreateZoneResponse>;
+  create(options: CreateZoneRequest, callback: CreateZoneCallback): void;
+  create(
+    options: CreateZoneRequest,
+    callback?: CreateZoneCallback
+  ): void | Promise<CreateZoneResponse> {
+    return super.create(options, callback!);
   }
 
   get(config?: GetZoneRequest): Promise<GetResponse<Zone>>;

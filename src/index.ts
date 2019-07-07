@@ -59,6 +59,12 @@ export interface CreateZoneRequest {
 
 export type CreateZoneResponse = [Zone, Metadata];
 
+export type CreateZoneCallback = (
+  err: Error | null,
+  zone?: Zone | null,
+  apiResponse?: Metadata
+) => void;
+
 export interface DNSOptions extends GoogleAuthOptions {
   /**
    * The API endpoint of the service used to make requests.
