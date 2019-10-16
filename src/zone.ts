@@ -172,14 +172,23 @@ export interface ZoneExportCallback {
   (err: Error | null): void;
 }
 
+// This type essentially just clones a class but allows us to exclude methods
+// from the type itself. In this case it is useful because we want to override
+// the Zone#create signature that is defined in the common library.
 type Without<T, K> = {
   [P in Exclude<keyof T, K>]: T[P];
 };
+
+// Using the Without type, we essentially make a new ServiceObject type that
+// doesn't contain any of the methods that have signatures we wish to override.
 type ZoneServiceObject = new (config: ServiceObjectConfig) => Without<
   ServiceObject<Zone>,
   'create' | 'delete' | 'get'
 >;
 
+// This is used purely for making TypeScript think that the object we are
+// subclassing does not contain a signature mismatch for methods we are
+// overriding.
 // tslint:disable-next-line variable-name
 const ZoneServiceObject = ServiceObject as ZoneServiceObject;
 
