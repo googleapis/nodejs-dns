@@ -47,6 +47,7 @@
     "@google-cloud/promisify": "^1.0.0",
     "arrify": "^2.0.0",
     "dns-zonefile": "0.2.3",
+    "jsdoc-region-tag": "^1.0.2",
     "lodash.groupby": "^4.6.0",
     "string-format-obj": "^1.1.1"
   },
