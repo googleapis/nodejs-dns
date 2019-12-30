@@ -16,6 +16,7 @@
 
 const {execSync} = require('child_process');
 const {assert} = require('chai');
+const {describe, it, before, after} = require('mocha');
 const {DNS} = require('@google-cloud/dns');
 const uuid = require('uuid');
 
