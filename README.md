@@ -55,19 +55,19 @@ npm install @google-cloud/dns
 ### Using the client library
 
 ```javascript
-  // Imports the Google Cloud client library
-  const {DNS} = require('@google-cloud/dns');
+// Imports the Google Cloud client library
+const {DNS} = require('@google-cloud/dns');
 
-  // Creates a client
-  const dns = new DNS();
+// Creates a client
+const dns = new DNS();
 
-  async function quickstart() {
-    // Lists all zones in the current project
-    const [zones] = await dns.getZones();
-    console.log('Zones:');
-    zones.forEach(zone => console.log(zone.name));
-  }
-  quickstart();
+async function quickstart() {
+  // Lists all zones in the current project
+  const [zones] = await dns.getZones();
+  console.log('Zones:');
+  zones.forEach(zone => console.log(zone.name));
+}
+quickstart();
 
 ```
 
@@ -111,11 +111,13 @@ More Information: [Google Cloud Platform Launch Stages][launch_stages]
 
 Contributions welcome! See the [Contributing Guide](https://github.com/googleapis/nodejs-dns/blob/master/CONTRIBUTING.md).
 
-Please note that this `README.md`, the `samples/README.md`,
+Please note that this [README.md](README.md), the [samples/README.md](samples/README.md),
 and a variety of configuration files in this repository (including `.nycrc` and `tsconfig.json`)
-are generated from a central template. To edit one of these files, make an edit
-to its template in this
-[directory](https://github.com/googleapis/synthtool/tree/master/synthtool/gcp/templates/node_library).
+are generated from a central template.
+
+If you would like to make edits to one of those files
+(or if you aren't certain if the file you're changing is one, check in the template repository before making changes),
+look for the file in the [template](https://github.com/googleapis/synthtool/tree/master/synthtool/gcp/templates/node_library).
 
 ## License
 
