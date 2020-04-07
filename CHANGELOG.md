@@ -4,6 +4,13 @@
 
 [1]: https://www.npmjs.com/package/@google-cloud/dns?activeTab=versions
 
+### [1.2.10](https://www.github.com/googleapis/nodejs-dns/compare/v1.2.9...v1.2.10) (2020-04-07)
+
+
+### Bug Fixes
+
+* apache license URL ([#468](https://www.github.com/googleapis/nodejs-dns/issues/468)) ([#372](https://www.github.com/googleapis/nodejs-dns/issues/372)) ([32e13a1](https://www.github.com/googleapis/nodejs-dns/commit/32e13a10bdcbea7abaa25add7cb133e5bf854c60))
+
 ### [1.2.9](https://www.github.com/googleapis/nodejs-dns/compare/v1.2.8...v1.2.9) (2020-03-17)
 
 
