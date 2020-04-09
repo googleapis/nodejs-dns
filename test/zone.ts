@@ -20,6 +20,7 @@ import {describe, it} from 'mocha';
 import * as proxyquire from 'proxyquire';
 import {CoreOptions, OptionsWithUri, Response} from 'request';
 import * as uuid from 'uuid';
+import {before, beforeEach} from 'mocha';
 
 import {Change, CreateChangeRequest} from '../src/change';
 import {Record, RecordObject} from '../src/record';
@@ -38,7 +39,7 @@ const fakePromisify = Object.assign({}, promisify, {
 let parseOverride: Function | null;
 const fakeDnsZonefile = {
   parse() {
-    return (parseOverride || (() => {})).apply(null, arguments);
+    return parseOverride || (() => {});
   },
 };
 
@@ -46,16 +47,17 @@ let writeFileOverride: Function | null;
 let readFileOverride: Function | null;
 const fakeFs = {
   readFile() {
-    return (readFileOverride || (() => {})).apply(null, arguments);
+    return readFileOverride || (() => {});
   },
   writeFile() {
-    return (writeFileOverride || (() => {})).apply(null, arguments);
+    return writeFileOverride || (() => {});
   },
 };
 
 class FakeChange {
   calledWith_: IArguments;
   constructor() {
+    // eslint-disable-next-line prefer-rest-params
     this.calledWith_ = arguments;
   }
 }
@@ -63,10 +65,12 @@ class FakeChange {
 class FakeRecord {
   calledWith_: IArguments;
   constructor() {
+    // eslint-disable-next-line prefer-rest-params
     this.calledWith_ = arguments;
   }
   static fromZoneRecord_() {
     const record = new FakeRecord();
+    // eslint-disable-next-line prefer-rest-params
     record.calledWith_ = arguments;
     return record;
   }
@@ -76,6 +80,7 @@ class FakeServiceObject extends ServiceObject {
   calledWith_: IArguments;
   constructor(config: ServiceObjectConfig) {
     super(config);
+    // eslint-disable-next-line prefer-rest-params
     this.calledWith_ = arguments;
   }
 }

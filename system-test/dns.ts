@@ -18,7 +18,9 @@ import * as fs from 'fs';
 import * as tmp from 'tmp';
 import * as util from 'util';
 import * as uuid from 'uuid';
+import {after, before} from 'mocha';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const format = require('string-format-obj');
 
 import {DNS, Record} from '../src';

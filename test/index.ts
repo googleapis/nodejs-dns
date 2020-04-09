@@ -24,6 +24,10 @@ import * as assert from 'assert';
 import {describe, it} from 'mocha';
 import * as proxyquire from 'proxyquire';
 import {CoreOptions, OptionsWithUri, Response} from 'request';
+import {before, beforeEach} from 'mocha';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const packageJSON = require('../../package.json');
 
 import {Zone} from '../src';
 
@@ -49,6 +53,7 @@ class FakeService extends Service {
   calledWith_: IArguments;
   constructor(config: ServiceConfig, options?: ServiceOptions) {
     super(config, options);
+    // eslint-disable-next-line prefer-rest-params
     this.calledWith_ = arguments;
   }
 }
@@ -73,6 +78,7 @@ const fakePromisify = Object.assign({}, promisify, {
 class FakeZone {
   calledWith_: IArguments;
   constructor() {
+    // eslint-disable-next-line prefer-rest-params
     this.calledWith_ = arguments;
   }
 }
@@ -129,10 +135,7 @@ describe('DNS', () => {
         'https://www.googleapis.com/auth/ndev.clouddns.readwrite',
         'https://www.googleapis.com/auth/cloud-platform',
       ]);
-      assert.deepStrictEqual(
-        calledWith.packageJson,
-        require('../../package.json')
-      );
+      assert.deepStrictEqual(calledWith.packageJson, packageJSON);
     });
 
     it('should enable apiEndpoint override', () => {

@@ -27,9 +27,10 @@ import arrify = require('arrify');
 import * as fs from 'fs';
 
 import groupBy = require('lodash.groupby');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const zonefile = require('dns-zonefile');
 
-import {Change, CreateChangeCallback, CreateChangeRequest} from './change';
+import {Change} from './change';
 import {Record, RecordMetadata, RecordObject} from './record';
 import {
   DNS,
@@ -83,7 +84,7 @@ export type DeleteZoneResponse = [Metadata];
  * @param {?Error} err Request error, if any.
  * @param {object} apiResponse The full API response.
  */
-export interface DeleteZoneCallback extends DeleteCallback {}
+export type DeleteZoneCallback = DeleteCallback;
 
 export interface DeleteZoneConfig {
   force?: boolean;
@@ -541,7 +542,7 @@ class Zone extends ZoneServiceObject {
       },
       (err, resp) => {
         if (err) {
-          callback!(err, null, resp);
+          callback!(err, resp);
           return;
         }
         const change = this.change(resp.id);
