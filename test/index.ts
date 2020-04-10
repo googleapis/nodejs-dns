@@ -21,13 +21,9 @@ import {
 import * as promisify from '@google-cloud/promisify';
 import arrify = require('arrify');
 import * as assert from 'assert';
-import {describe, it} from 'mocha';
+import {describe, it, before, beforeEach} from 'mocha';
 import * as proxyquire from 'proxyquire';
 import {CoreOptions, OptionsWithUri, Response} from 'request';
-import {before, beforeEach} from 'mocha';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const packageJSON = require('../../package.json');
 
 import {Zone} from '../src';
 
@@ -135,7 +131,11 @@ describe('DNS', () => {
         'https://www.googleapis.com/auth/ndev.clouddns.readwrite',
         'https://www.googleapis.com/auth/cloud-platform',
       ]);
-      assert.deepStrictEqual(calledWith.packageJson, packageJSON);
+      assert.deepStrictEqual(
+        calledWith.packageJson,
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        require('../../package.json')
+      );
     });
 
     it('should enable apiEndpoint override', () => {

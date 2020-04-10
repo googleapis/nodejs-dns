@@ -19,9 +19,8 @@ import {
 } from '@google-cloud/common';
 import * as promisify from '@google-cloud/promisify';
 import * as assert from 'assert';
-import {describe, it} from 'mocha';
+import {describe, it, before, beforeEach} from 'mocha';
 import * as proxyquire from 'proxyquire';
-import {before, beforeEach} from 'mocha';
 
 import {Change} from '../src/change';
 

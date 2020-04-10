@@ -16,11 +16,10 @@ import {ServiceObject, ServiceObjectConfig} from '@google-cloud/common';
 import * as promisify from '@google-cloud/promisify';
 import arrify = require('arrify');
 import * as assert from 'assert';
-import {describe, it} from 'mocha';
+import {describe, it, before, beforeEach} from 'mocha';
 import * as proxyquire from 'proxyquire';
 import {CoreOptions, OptionsWithUri, Response} from 'request';
 import * as uuid from 'uuid';
-import {before, beforeEach} from 'mocha';
 
 import {Change, CreateChangeRequest} from '../src/change';
 import {Record, RecordObject} from '../src/record';
@@ -39,7 +38,8 @@ const fakePromisify = Object.assign({}, promisify, {
 let parseOverride: Function | null;
 const fakeDnsZonefile = {
   parse() {
-    return parseOverride || (() => {});
+    // eslint-disable-next-line prefer-spread, prefer-rest-params
+    return (parseOverride || (() => {})).apply(null, arguments);
   },
 };
 
@@ -47,41 +47,39 @@ let writeFileOverride: Function | null;
 let readFileOverride: Function | null;
 const fakeFs = {
   readFile() {
-    return readFileOverride || (() => {});
+    // eslint-disable-next-line prefer-spread, prefer-rest-params
+    return (readFileOverride || (() => {})).apply(null, arguments);
   },
   writeFile() {
-    return writeFileOverride || (() => {});
+    // eslint-disable-next-line prefer-spread, prefer-rest-params
+    return (writeFileOverride || (() => {})).apply(null, arguments);
   },
 };
 
 class FakeChange {
-  calledWith_: IArguments;
-  constructor() {
-    // eslint-disable-next-line prefer-rest-params
-    this.calledWith_ = arguments;
+  calledWith_: any[];
+  constructor(...args: any[]) {
+    this.calledWith_ = args;
   }
 }
 
 class FakeRecord {
-  calledWith_: IArguments;
-  constructor() {
-    // eslint-disable-next-line prefer-rest-params
-    this.calledWith_ = arguments;
+  calledWith_: any[];
+  constructor(...args: any[]) {
+    this.calledWith_ = args;
   }
-  static fromZoneRecord_() {
+  static fromZoneRecord_(...args: any[]) {
     const record = new FakeRecord();
-    // eslint-disable-next-line prefer-rest-params
-    record.calledWith_ = arguments;
+    record.calledWith_ = args;
     return record;
   }
 }
 
 class FakeServiceObject extends ServiceObject {
-  calledWith_: IArguments;
-  constructor(config: ServiceObjectConfig) {
+  calledWith_: any[];
+  constructor(config: ServiceObjectConfig, ...args: any[]) {
     super(config);
-    // eslint-disable-next-line prefer-rest-params
-    this.calledWith_ = arguments;
+    this.calledWith_ = args;
   }
 }
 

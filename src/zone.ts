@@ -27,6 +27,7 @@ import arrify = require('arrify');
 import * as fs from 'fs';
 
 import groupBy = require('lodash.groupby');
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const zonefile = require('dns-zonefile');
 
@@ -542,7 +543,7 @@ class Zone extends ZoneServiceObject {
       },
       (err, resp) => {
         if (err) {
-          callback!(err, resp);
+          callback!(err, undefined, resp);
           return;
         }
         const change = this.change(resp.id);
