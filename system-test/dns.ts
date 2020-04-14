@@ -285,8 +285,7 @@ describe('dns', () => {
         const onRecordsReceived = (
           err?: Error | null,
           records?: Record[] | null,
-          nextQuery?: {} | null,
-          apiResponse?: Metadata
+          nextQuery?: {} | null
         ) => {
           if (nextQuery) {
             ZONE.getRecords(nextQuery, onRecordsReceived);
