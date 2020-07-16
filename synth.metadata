@@ -4,7 +4,7 @@
       "git": {
         "name": ".",
         "remote": "https://github.com/googleapis/nodejs-dns.git",
-        "sha": "97970e2a69560f7f7feb3b9a61a4cd9cb0030ef7"
+        "sha": "8e4153b89effc52a430af8fbbd6d7edbd254a6b3"
       }
     },
     {
