@@ -28,12 +28,14 @@ describe(__filename, () => {
 
   before(async () => {
     const projectId = await dns.getProjectId();
-    return dns.createZone(zoneName, {
+    await dns.createZone(zoneName, {
       dnsName: `${projectId}.appspot.com.`,
     });
   });
 
-  after(() => dns.zone(zoneName).delete());
+  after(async () => {
+    await dns.zone(zoneName).delete();
+  });
 
   it('should run the quickstart', () => {
     const output = exec('node quickstart');
