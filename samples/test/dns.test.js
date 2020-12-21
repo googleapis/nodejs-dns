@@ -30,6 +30,9 @@ describe(__filename, () => {
     const projectId = await dns.getProjectId();
     await dns.createZone(zoneName, {
       dnsName: `${projectId}.appspot.com.`,
+      dnssecConfig: {
+        state: 'on',
+      },
     });
   });
 
