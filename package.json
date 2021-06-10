@@ -32,7 +32,7 @@
     "test": "c8 mocha build/test",
     "samples-test": "cd samples/ && npm link ../ && npm test && cd ../",
     "presystem-test": "npm run compile",
-    "system-test": "mocha build/system-test --timeout 1800000",
+    "system-test": "mocha build/system-test --timeout 2400000",
     "clean": "gts clean",
     "compile": "tsc -p .",
     "fix": "gts fix",
