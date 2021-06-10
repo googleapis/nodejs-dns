@@ -32,7 +32,7 @@
     "test": "c8 mocha build/test",
     "samples-test": "cd samples/ && npm link ../ && npm test && cd ../",
     "presystem-test": "npm run compile",
-    "system-test": "mocha build/system-test --timeout 600000",
+    "system-test": "mocha build/system-test --timeout 1800000",
     "clean": "gts clean",
     "compile": "tsc -p .",
     "fix": "gts fix",
@@ -50,7 +50,7 @@
     "@google-cloud/paginator": "^3.0.0",
     "@google-cloud/promisify": "^2.0.0",
     "arrify": "^2.0.0",
-    "dns-zonefile": "0.2.6",
+    "dns-zonefile": "0.2.7",
     "lodash.groupby": "^4.6.0",
     "string-format-obj": "^1.1.1"
   },
