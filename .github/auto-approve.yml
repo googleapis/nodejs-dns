@@ -6,7 +6,7 @@ rules:
   - "CHANGELOG\\.md$"
   maxFiles: 3
 - author: "renovate-bot"
-  title: "^(fix|chore)\\(deps\\):"
+  title: "^(fix\\(deps\\)|chore\\(deps\\)):"
   changedFiles: 
-  - "package\\.json$"
+  - "/package\\.json$"
   maxFiles: 2
