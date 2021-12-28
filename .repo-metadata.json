@@ -11,5 +11,5 @@
   "api_id": "dns.googleapis.com",
   "requires_billing": true,
   "api_shortname": "dns",
-  "library_type": ""
+  "library_type": "GAPIC_MANUAL"
 }
